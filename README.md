@@ -6,85 +6,68 @@ Hur vi ser på eventen som skickas från kunderna.
 
 ### text
 
+Vanliga meddelanden från kunden.
+
 ```json
 {
   "type": "text",
   "platform": "webchat",
+  "text": "Jag vill ändra faktura 70557076",
   "user": {
-    "id": "aed0bbd9-545f-4f88-bc14-3a62cf206477",
-    "userId": "aed0bbd9-545f-4f88-bc14-3a62cf206477",
-    "platform": "webchat",
-    "gender": "unknown",
-    "timezone": null,
-    "picture_url": null,
-    "first_name": null,
-    "last_name": null,
-    "locale": null,
-    "created_on": "2020-02-18T10:26:57.583Z"
+    "id": "8a8b5c18-c0dd-467b-bd77-7e7685fadf6d"
   },
-  "text": "client 5 Jag vill ändra faktura 70557076",
   "raw": {
-    "text": "client 5 Jag vill ändra faktura 70557076",
+    "text": "Jag vill ändra faktura 70557076",
     "type": "text",
     "platformId": "webchat",
-    "conversationId": 826
+    "conversationId": 862
   }
 }
 ```
 
-### text (with image)
+### text (med bild)
+
+Meddelanden från kunden med en bifogad bild. Skickar med ett meddelande också som alltid visas med bilden.
 
 ```json
 {
   "type": "text",
   "platform": "webchat",
-  "user": {
-    "id": "79d6dc18-c2c8-4377-b01f-96d21d619b43",
-    "userId": "79d6dc18-c2c8-4377-b01f-96d21d619b43",
-    "platform": "webchat",
-    "gender": "unknown",
-    "timezone": null,
-    "picture_url": null,
-    "first_name": null,
-    "last_name": null,
-    "locale": null,
-    "created_on": "2020-02-18T10:27:20.021Z"
-  },
   "text": "Bifogad bild:",
+  "user": {
+    "id": "470e84d7-abcf-4360-8f3b-c39cd50eeb3c"
+  },
   "raw": {
     "text": "Bifogad bild:",
     "type": "text",
     "data": {
-      "image": "data:image/jpeg;base64AAA=="
-    }
+      "image": "data:image/jpeg;base64,/9j/4AAQSkZJRgAB+UinhpBuBqJlnCSSdoePgIDo//2Q=="
+    },
+    "platformId": "webchat",
+    "conversationId": 846
   }
 }
 ```
 
 ### heartbeat
 
+Skickas från kunden för att kunna hålla koll på om kunden har en stabil uppkoppling.
+
 ```json
 {
-  "platform": "webchat",
   "type": "heartbeat",
+  "platform": "webchat",
   "text": "beat",
   "user": {
-    "id": "78b48070-1069-4e16-b432-acfc5debb411",
-    "userId": "78b48070-1069-4e16-b432-acfc5debb411",
-    "platform": "webchat",
-    "gender": "unknown",
-    "timezone": null,
-    "picture_url": null,
-    "first_name": null,
-    "last_name": null,
-    "locale": null,
-    "created_on": "2020-02-18T10:26:56.031Z"
+    "id": "8a8b5c18-c0dd-467b-bd77-7e7685fadf6d"
   },
   "raw": {}
 }
 ```
 
-### message read
+### message_read
+
+Skickar en timestamp när kunden senast har läst ett meddelande.
 
 ```json
 {
@@ -92,25 +75,18 @@ Hur vi ser på eventen som skickas från kunderna.
   "platform": "webchat",
   "text": "read",
   "user": {
-    "id": "78b48070-1069-4e16-b432-acfc5debb411",
-    "userId": "78b48070-1069-4e16-b432-acfc5debb411",
-    "platform": "webchat",
-    "gender": "unknown",
-    "timezone": null,
-    "picture_url": null,
-    "first_name": null,
-    "last_name": null,
-    "locale": null,
-    "created_on": "2020-02-18T10:26:56.031Z"
+    "id": "38d93922-77c9-4f47-9ce2-0df72a728fa9"
   },
   "raw": {
-    "to": "78b48070-1069-4e16-b432-acfc5debb411",
-    "at": "2020-02-18T10:27:06.060Z"
+    "to": "38d93922-77c9-4f47-9ce2-0df72a728fa9",
+    "at": "2020-02-18T12:14:11.386Z"
   }
 }
 ```
 
 ### client_left
+
+Kunden har tryckt på krysset i iFramen och bekräftat att den vill lämna chatten.
 
 ```json
 {
@@ -118,25 +94,18 @@ Hur vi ser på eventen som skickas från kunderna.
   "platform": "webchat",
   "text": "Kunden har stängt chatten.",
   "user": {
-    "id": "fe5b4dae-7f97-4d8a-90b6-b1f7b1fa067c",
-    "userId": "fe5b4dae-7f97-4d8a-90b6-b1f7b1fa067c",
-    "platform": "webchat",
-    "gender": "unknown",
-    "timezone": null,
-    "picture_url": null,
-    "first_name": null,
-    "last_name": null,
-    "locale": null,
-    "created_on": "2020-02-18T10:25:53.559Z"
+    "id": "f9653bf3-0c6c-4d22-9547-7cd00382c775"
   },
   "raw": {
-    "to": "fe5b4dae-7f97-4d8a-90b6-b1f7b1fa067c",
-    "at": "2020-02-18T10:25:58.120Z"
+    "to": "f9653bf3-0c6c-4d22-9547-7cd00382c775",
+    "at": "2020-02-18T12:12:33.766Z"
   }
 }
 ```
 
 ### client_unload
+
+Kunden har stängt ner fliken den har chatten i. Använder https://developer.mozilla.org/en-US/docs/Web/API/Window/unload_event.
 
 ```json
 {
@@ -144,20 +113,11 @@ Hur vi ser på eventen som skickas från kunderna.
   "platform": "webchat",
   "text": "NO_MESSAGE",
   "user": {
-    "id": "fcd8237b-f29a-44aa-b4e8-f439653680ea",
-    "userId": "fcd8237b-f29a-44aa-b4e8-f439653680ea",
-    "platform": "webchat",
-    "gender": "unknown",
-    "timezone": null,
-    "picture_url": null,
-    "first_name": null,
-    "last_name": null,
-    "locale": null,
-    "created_on": "2020-02-18T10:26:11.808Z"
+    "id": "0a1f5b59-8d7e-4649-87ef-274bda362c56"
   },
   "raw": {
-    "to": "fcd8237b-f29a-44aa-b4e8-f439653680ea",
-    "at": "2020-02-18T10:26:15.581Z"
+    "to": "0a1f5b59-8d7e-4649-87ef-274bda362c56",
+    "at": "2020-02-18T12:10:18.968Z"
   }
 }
 ```
@@ -166,7 +126,9 @@ Hur vi ser på eventen som skickas från kunderna.
 
 Hur vi ser på eventen som skickas från agenterna.
 
-### queue number
+### queue_number
+
+Skickas när kunden placeras i en kö. Skickas ut ett könummer.
 
 ```json
 {
@@ -247,7 +209,7 @@ Hur vi ser på eventen som skickas från agenterna.
 }
 ```
 
-### text (with image)
+### text (med bild)
 
 ```json
 {
@@ -260,14 +222,16 @@ Hur vi ser på eventen som skickas från agenterna.
     "to": "79d6dc18-c2c8-4377-b01f-96d21d619b43",
     "message": "Bifogad bild:",
     "data": {
-      "image": "data:image/jpeg;base64=="
+      "image": "data:image/jpeg;base64,/9j/4AAQSkZJRgAB+UinhpBuBqJlnCSSdoePgIDo//2Q=="
     },
     "text": "Bifogad bild:"
   }
 }
 ```
 
-### agent done
+### agent_done
+
+Agenten klickar bort chatten som att den är klar med denna session.
 
 ```json
 {
@@ -288,8 +252,9 @@ Hur vi ser på eventen som skickas från agenterna.
 }
 ```
 
+### typing_on
 
-### typing on (agenten börjar skriva ett meddelande)
+Agenten har börjat att skriva ett meddelande.
 
 ```json
 {
@@ -308,7 +273,9 @@ Hur vi ser på eventen som skickas från agenterna.
 }
 ```
 
-### typing off (agenten har slutat skriva ett meddelande)
+### typing_off
+
+Agenten har slutat att skriva ett meddelande. Innebär att de inte har skrivit något på cirka 20s.
 
 ```json
 {
@@ -327,10 +294,26 @@ Hur vi ser på eventen som skickas från agenterna.
 }
 ```
 
-### Heartbeat
+### platform_closed
+
+Skickas när den primära kön för en platform har stängts.
+
+```json
+{
+  "type": "platform_closed",
+  "platform": "webchat",
+  "text": "",
+  "user": {
+    "id": "c2e24ee0-d503-4177-955c-eb89508caa63"
+  },
+  "raw": {}
+}
+```
+
+### heartbeat
 
 Skickas ej som ett event genom vår Broker från agenter. Den logiken är i vår Agent-tjänst.
 
-### Agent handover
+### agent_handover
 
 Skickas ej som ett event genom vår Broker. Görs ett direkt REST-anrop mellan tjänsterna nu.
