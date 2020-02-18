@@ -1,5 +1,24 @@
 # Sermo Events
 
+Det finns två separata köer där event skickas. En för "Inbound" och en för "Outbound".
+
+* "Inbound" är från vad kunderna gör.
+* "Outbound" är från vad boten och agenterna gör.
+
+## Typiskt scenario
+
+### Standardflöde
+
+1. Ett ny slutkund öppnar en chat och direkt så börjar det komma in `heartbeat`-events som visar att klienten är där.
+1. När kunden börjar skriva ett meddelande så skickas `typing`-event vilket gör det möljigt för Agent-GUI:et att lyssna in och visa agenten vad kunden skriver i realtid.
+1. När kunden skickar sitt första meddelande så kommer det som ett `text`-event med självaste texten.
+1. Boten läser meddelandet skickar ett svar i form av ett outbound `text`-event.
+1. Om Boten behöver lämna över till en agent så skickas ett `handover_to`-event.
+1. Avaya har lyssnat på alla event ovan och kan då visa agenten historiken.
+1. När agenten har skrivit ett meddelande så skickar Avaya ett outbound `text`-event.
+1. Kunden stänger chattfönstret vilket skickar ett `client_closed`-event.
+
+
 ## "Inbound" (skickat från kunden)
 
 Hur vi ser på eventen som skickas från kunderna.
@@ -11,17 +30,9 @@ Vanliga meddelanden från kunden.
 ```json
 {
   "type": "text",
-  "platform": "webchat",
-  "text": "Jag vill ändra faktura 70557076",
-  "user": {
-    "id": "8a8b5c18-c0dd-467b-bd77-7e7685fadf6d"
-  },
-  "raw": {
-    "text": "Jag vill ändra faktura 70557076",
-    "type": "text",
-    "platformId": "webchat",
-    "conversationId": 862
-  }
+  "platformId": "webchat",
+  "userId": "8a8b5c18-c0dd-467b-bd77-7e7685fadf6d",
+  "text": "Jag vill ändra faktura 70557076"
 }
 ```
 
@@ -32,20 +43,10 @@ Meddelanden från kunden med en bifogad bild. Skickar med ett meddelande också 
 ```json
 {
   "type": "text",
-  "platform": "webchat",
+  "platformId": "webchat",
+  "userId": "8a8b5c18-c0dd-467b-bd77-7e7685fadf6d",
   "text": "Bifogad bild:",
-  "user": {
-    "id": "470e84d7-abcf-4360-8f3b-c39cd50eeb3c"
-  },
-  "raw": {
-    "text": "Bifogad bild:",
-    "type": "text",
-    "data": {
-      "image": "data:image/jpeg;base64,/9j/4AAQSkZJRgAB+UinhpBuBqJlnCSSdoePgIDo//2Q=="
-    },
-    "platformId": "webchat",
-    "conversationId": 846
-  }
+  "image": "data:image/jpeg;base64,/9j/4AAQSkZJRgAB+UinhpBuBqJlnCSSdoePgIDo//2Q=="
 }
 ```
 
@@ -56,31 +57,22 @@ Skickas från kunden för att kunna hålla koll på om kunden har en stabil uppk
 ```json
 {
   "type": "heartbeat",
-  "platform": "webchat",
-  "text": "beat",
-  "user": {
-    "id": "8a8b5c18-c0dd-467b-bd77-7e7685fadf6d"
-  },
-  "raw": {}
+  "platformId": "webchat",
+  "userId": "8a8b5c18-c0dd-467b-bd77-7e7685fadf6d"
 }
 ```
 
-### message_read
+### messages_read
 
 Skickar en timestamp när kunden senast har läst ett meddelande.
 
 ```json
 {
   "type": "messages_read",
-  "platform": "webchat",
+  "platformId": "webchat",
+  "userId": "8a8b5c18-c0dd-467b-bd77-7e7685fadf6d",
   "text": "read",
-  "user": {
-    "id": "38d93922-77c9-4f47-9ce2-0df72a728fa9"
-  },
-  "raw": {
-    "to": "38d93922-77c9-4f47-9ce2-0df72a728fa9",
-    "at": "2020-02-18T12:14:11.386Z"
-  }
+  "at": "2020-02-18T12:14:11.386Z"
 }
 ```
 
@@ -91,15 +83,10 @@ Kunden har tryckt på krysset i iFramen och bekräftat att den vill lämna chatt
 ```json
 {
   "type": "client_left",
-  "platform": "webchat",
+  "platformId": "webchat",
+  "userId": "8a8b5c18-c0dd-467b-bd77-7e7685fadf6d",
   "text": "Kunden har stängt chatten.",
-  "user": {
-    "id": "f9653bf3-0c6c-4d22-9547-7cd00382c775"
-  },
-  "raw": {
-    "to": "f9653bf3-0c6c-4d22-9547-7cd00382c775",
-    "at": "2020-02-18T12:12:33.766Z"
-  }
+  "at": "2020-02-18T12:12:33.766Z"
 }
 ```
 
@@ -110,15 +97,23 @@ Kunden har stängt ner fliken den har chatten i. Använder https://developer.moz
 ```json
 {
   "type": "client_unload",
-  "platform": "webchat",
-  "text": "NO_MESSAGE",
-  "user": {
-    "id": "0a1f5b59-8d7e-4649-87ef-274bda362c56"
-  },
-  "raw": {
-    "to": "0a1f5b59-8d7e-4649-87ef-274bda362c56",
-    "at": "2020-02-18T12:10:18.968Z"
-  }
+  "platformId": "webchat",
+  "userId": "8a8b5c18-c0dd-467b-bd77-7e7685fadf6d",
+  "at": "2020-02-18T12:10:18.968Z"
+}
+```
+
+### typing
+
+Skickas nuvarande text kunden har skrivit till agenten innan meddelandet har skickats.
+
+```json
+{
+  "type": "typing",
+  "platformId": "webchat",
+  "userId": "8a8b5c18-c0dd-467b-bd77-7e7685fadf6d",
+  "text": "Hej, jag mitt na",
+  "at": "2020-02-18T14:41:37.571Z"
 }
 ```
 
@@ -132,13 +127,10 @@ Skickas när kunden placeras i en kö. Skickas ut ett könummer.
 
 ```json
 {
-  "platform": "webchat",
   "type": "queue_number",
-  "user": {
-    "id": "79d6dc18-c2c8-4377-b01f-96d21d619b43"
-  },
-  "text": "1",
-  "raw": {}
+  "platformId": "webchat",
+  "userId": "8a8b5c18-c0dd-467b-bd77-7e7685fadf6d",
+  "queueNumber": 1
 }
 ```
 
@@ -147,64 +139,32 @@ Skickas när kunden placeras i en kö. Skickas ut ett könummer.
 ```json
 {
   "type": "text",
-  "platform": "webchat",
-  "user": {
-    "id": "79d6dc18-c2c8-4377-b01f-96d21d619b43"
-  },
-  "raw": {
-    "to": "79d6dc18-c2c8-4377-b01f-96d21d619b43",
-    "message": "Jag skickar ett SMS till dig nu med betalningsuppgifterna, det kommer plinga i din telefonen inom en minut.",
-    "data": {},
-    "agent": {
-      "id": "alote1",
-      "name": "alote1",
-      "type": "human"
-    }
-  },
-  "data": {},
-  "text": "Jag skickar ett SMS till dig nu med betalningsuppgifterna, det kommer plinga i din telefonen inom en minut."
+  "platformId": "webchat",
+  "userId": "8a8b5c18-c0dd-467b-bd77-7e7685fadf6d",
+  "text": "Jag skickar ett SMS till dig nu med betalningsuppgifterna, det kommer plinga i din telefonen inom en minut.",
+  "agent": {
+    "id": "anan01",
+    "name": "Anders Andersson",
+    "type": "human"
+  }
 }
 ```
 
 ### text (från Boten)
 
+Boten har en simulerad "typing" för att svaret inte ska dyka upp för
+snabbt för kunden och det ska se ut som att den skriver.
+
 ```json
 {
-  "raw": {
-    "to": "10e4d33c-19e8-4680-b764-ff69a18a3909",
-    "agent": {
-      "id": "bot",
-      "name": "Bot"
-    },
-    "message": "Hej!",
-    "typing": 1000
-  },
   "type": "text",
-  "user": {
-    "id": "10e4d33c-19e8-4680-b764-ff69a18a3909"
-  },
+  "platformId": "webchat",
+  "userId": "8a8b5c18-c0dd-467b-bd77-7e7685fadf6d",
   "text": "Hej!",
-  "platform": "webchat"
-}
-```
-
-### text (systemmeddelanden)
-
-```json
-{
-  "type": "text",
-  "platform": "webchat",
-  "text": "Chatten har placerats i kön \"Com Hem allmänt\"",
-  "user": {
-    "id": "79d6dc18-c2c8-4377-b01f-96d21d619b43"
-  },
-  "raw": {
-    "to": "79d6dc18-c2c8-4377-b01f-96d21d619b43",
-    "agent": {
-      "id": "system",
-      "name": "Info"
-    },
-    "message": "Chatten har placerats i kön \"Com Hem allmänt\""
+  "typing": 1000,
+  "agent": {
+    "id": "bot",
+    "name": "Bot"
   }
 }
 ```
@@ -214,18 +174,23 @@ Skickas när kunden placeras i en kö. Skickas ut ett könummer.
 ```json
 {
   "type": "text",
-  "platform": "webchat",
-  "user": {
-    "id": "79d6dc18-c2c8-4377-b01f-96d21d619b43"
-  },
-  "raw": {
-    "to": "79d6dc18-c2c8-4377-b01f-96d21d619b43",
-    "message": "Bifogad bild:",
-    "data": {
-      "image": "data:image/jpeg;base64,/9j/4AAQSkZJRgAB+UinhpBuBqJlnCSSdoePgIDo//2Q=="
-    },
-    "text": "Bifogad bild:"
-  }
+  "platformId": "webchat",
+  "userId": "8a8b5c18-c0dd-467b-bd77-7e7685fadf6d",
+  "text": "Bifogad bild:",
+  "image": "data:image/jpeg;base64,/9j/4AAQSkZJRgAB+UinhpBuBqJlnCSSdoePgIDo//2Q=="
+}
+```
+
+### system_text
+
+Meddelanden för att kunden ska veta att den blivit tilldelad en agent och kö.
+
+```json
+{
+  "type": "system_text",
+  "platformId": "webchat",
+  "userId": "8a8b5c18-c0dd-467b-bd77-7e7685fadf6d",
+  "text": "Chatten har placerats i kön \"Com Hem allmänt\""
 }
 ```
 
@@ -236,19 +201,8 @@ Agenten klickar bort chatten som att den är klar med denna session.
 ```json
 {
   "type": "agent_done",
-  "platform": "webchat",
-  "user": {
-    "id": "bba79883-31e5-42f1-979f-0697184ddd73"
-  },
-  "raw": {
-    "to": "bba79883-31e5-42f1-979f-0697184ddd73",
-    "agent": {
-      "id": "system",
-      "name": "Info"
-    },
-    "message": "Agenten är inte längre aktiv i chatten. Om något är oklart och du behöver komma i kontakt med oss igen, skriv ytterligare ett meddelande här, så tar vi vid där vi slutade."
-  },
-  "text": "Agenten är inte längre aktiv i chatten. Om något är oklart och du behöver komma i kontakt med oss igen, skriv ytterligare ett meddelande här, så tar vi vid där vi slutade."
+  "platformId": "webchat",
+  "userId": "8a8b5c18-c0dd-467b-bd77-7e7685fadf6d"
 }
 ```
 
@@ -259,38 +213,20 @@ Agenten har börjat att skriva ett meddelande.
 ```json
 {
   "type": "typing_on",
-  "platform": "webchat",
-  "text": "sdf",
-  "user": {
-    "id": "79d6dc18-c2c8-4377-b01f-96d21d619b43"
-  },
-  "raw": {
-    "to": "79d6dc18-c2c8-4377-b01f-96d21d619b43",
-    "agent": {
-      "name": ""
-    }
-  }
+  "platformId": "webchat",
+  "userId": "8a8b5c18-c0dd-467b-bd77-7e7685fadf6d"
 }
 ```
 
 ### typing_off
 
-Agenten har slutat att skriva ett meddelande. Innebär att de inte har skrivit något på cirka 20s.
+Agenten har slutat att skriva ett meddelande. Innebär att de inte har skrivit på några sekunder.
 
 ```json
 {
   "type": "typing_off",
-  "platform": "webchat",
-  "text": "sdf",
-  "user": {
-    "id": "79d6dc18-c2c8-4377-b01f-96d21d619b43"
-  },
-  "raw": {
-    "to": "79d6dc18-c2c8-4377-b01f-96d21d619b43",
-    "agent": {
-      "name": ""
-    }
-  }
+  "platformId": "webchat",
+  "userId": "8a8b5c18-c0dd-467b-bd77-7e7685fadf6d"
 }
 ```
 
@@ -301,19 +237,39 @@ Skickas när den primära kön för en platform har stängts.
 ```json
 {
   "type": "platform_closed",
-  "platform": "webchat",
-  "text": "",
-  "user": {
-    "id": "c2e24ee0-d503-4177-955c-eb89508caa63"
-  },
-  "raw": {}
+  "platformId": "webchat",
+  "userId": "8a8b5c18-c0dd-467b-bd77-7e7685fadf6d"
 }
 ```
 
-### heartbeat
+### handover_to
 
-Skickas ej som ett event genom vår Broker från agenter. Den logiken är i vår Agent-tjänst.
+Om agent id är "bot" så är det alltid ett Bot-event annars är det från en mänsklig agent.
 
-### agent_handover
+Här ges boten sessionen:
 
-Skickas ej som ett event genom vår Broker. Görs ett direkt REST-anrop mellan tjänsterna nu.
+```json
+{
+  "type": "handover_to",
+  "platformId": "webchat",
+  "userId": "8a8b5c18-c0dd-467b-bd77-7e7685fadf6d",
+  "agent": {
+    "id": "bot",
+    "name": "Bot"
+  }
+}
+```
+
+Här lämnar boten över till agenten:
+
+```json
+{
+  "type": "handover_to",
+  "platformId": "webchat",
+  "userId": "8a8b5c18-c0dd-467b-bd77-7e7685fadf6d",
+  "agent": {
+    "id": "anan01",
+    "name": "Anders Andersson",
+  }
+}
+```
