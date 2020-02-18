@@ -242,34 +242,26 @@ Skickas när den primära kön för en platform har stängts.
 }
 ```
 
-### handover_to
+### handover_to_bot
 
-Om agent id är "bot" så är det alltid ett Bot-event annars är det från en mänsklig agent.
-
-Här ges boten sessionen:
+Sessionen lämnas över till Boten och den kör sina flöden.
 
 ```json
 {
-  "type": "handover_to",
+  "type": "handover_to_bot",
   "platformId": "webchat",
-  "userId": "8a8b5c18-c0dd-467b-bd77-7e7685fadf6d",
-  "agent": {
-    "id": "bot",
-    "name": "Bot"
-  }
+  "userId": "8a8b5c18-c0dd-467b-bd77-7e7685fadf6d"
 }
 ```
 
-Här lämnar boten över till agenten:
+### handover_to_agent
+
+Här lämnar boten över till en agent via en kö.
 
 ```json
 {
-  "type": "handover_to",
+  "type": "handover_to_agent",
   "platformId": "webchat",
-  "userId": "8a8b5c18-c0dd-467b-bd77-7e7685fadf6d",
-  "agent": {
-    "id": "anan01",
-    "name": "Anders Andersson",
-  }
+  "userId": "8a8b5c18-c0dd-467b-bd77-7e7685fadf6d"
 }
 ```
