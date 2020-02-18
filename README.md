@@ -250,7 +250,8 @@ Sessionen lämnas över till Boten och den kör sina flöden.
 {
   "type": "handover_to_bot",
   "platformId": "webchat",
-  "userId": "8a8b5c18-c0dd-467b-bd77-7e7685fadf6d"
+  "userId": "8a8b5c18-c0dd-467b-bd77-7e7685fadf6d",
+  "flowGroupId": "end"
 }
 ```
 
