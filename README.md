@@ -30,7 +30,7 @@ Vanliga meddelanden från kunden.
 ```json
 {
   "type": "text",
-  "platformId": "webchat",
+  "platformId": "comviq-web",
   "userId": "8a8b5c18-c0dd-467b-bd77-7e7685fadf6d",
   "text": "Jag vill ändra faktura 70557076"
 }
@@ -43,7 +43,7 @@ Meddelanden från kunden med en bifogad bild. Skickar med ett meddelande också 
 ```json
 {
   "type": "text",
-  "platformId": "webchat",
+  "platformId": "comviq-web",
   "userId": "8a8b5c18-c0dd-467b-bd77-7e7685fadf6d",
   "text": "Bifogad bild:",
   "image": "data:image/jpeg;base64,/9j/4AAQSkZJRgAB+UinhpBuBqJlnCSSdoePgIDo//2Q=="
@@ -57,7 +57,7 @@ Skickas från kunden för att kunna hålla koll på om kunden har en stabil uppk
 ```json
 {
   "type": "heartbeat",
-  "platformId": "webchat",
+  "platformId": "comviq-web",
   "userId": "8a8b5c18-c0dd-467b-bd77-7e7685fadf6d"
 }
 ```
@@ -69,7 +69,7 @@ Skickar en timestamp när kunden senast har läst ett meddelande.
 ```json
 {
   "type": "messages_read",
-  "platformId": "webchat",
+  "platformId": "comviq-web",
   "userId": "8a8b5c18-c0dd-467b-bd77-7e7685fadf6d",
   "text": "read",
   "at": "2020-02-18T12:14:11.386Z"
@@ -83,7 +83,7 @@ Kunden har tryckt på krysset i iFramen och bekräftat att den vill lämna chatt
 ```json
 {
   "type": "client_left",
-  "platformId": "webchat",
+  "platformId": "comviq-web",
   "userId": "8a8b5c18-c0dd-467b-bd77-7e7685fadf6d",
   "text": "Kunden har stängt chatten.",
   "at": "2020-02-18T12:12:33.766Z"
@@ -97,7 +97,7 @@ Kunden har stängt ner fliken den har chatten i. Använder https://developer.moz
 ```json
 {
   "type": "client_unload",
-  "platformId": "webchat",
+  "platformId": "comviq-web",
   "userId": "8a8b5c18-c0dd-467b-bd77-7e7685fadf6d",
   "at": "2020-02-18T12:10:18.968Z"
 }
@@ -110,7 +110,7 @@ Skickas nuvarande text kunden har skrivit till agenten innan meddelandet har ski
 ```json
 {
   "type": "typing",
-  "platformId": "webchat",
+  "platformId": "comviq-web",
   "userId": "8a8b5c18-c0dd-467b-bd77-7e7685fadf6d",
   "text": "Hej, jag mitt na",
   "at": "2020-02-18T14:41:37.571Z"
@@ -128,7 +128,7 @@ Skickas när kunden placeras i en kö. Skickas ut ett könummer.
 ```json
 {
   "type": "queue_number",
-  "platformId": "webchat",
+  "platformId": "comviq-web",
   "userId": "8a8b5c18-c0dd-467b-bd77-7e7685fadf6d",
   "queueNumber": 1
 }
@@ -139,7 +139,7 @@ Skickas när kunden placeras i en kö. Skickas ut ett könummer.
 ```json
 {
   "type": "text",
-  "platformId": "webchat",
+  "platformId": "comviq-web",
   "userId": "8a8b5c18-c0dd-467b-bd77-7e7685fadf6d",
   "text": "Jag skickar ett SMS till dig nu med betalningsuppgifterna, det kommer plinga i din telefonen inom en minut.",
   "agent": {
@@ -158,7 +158,7 @@ snabbt för kunden och det ska se ut som att den skriver.
 ```json
 {
   "type": "text",
-  "platformId": "webchat",
+  "platformId": "comviq-web",
   "userId": "8a8b5c18-c0dd-467b-bd77-7e7685fadf6d",
   "text": "Hej!",
   "typing": 1000,
@@ -174,7 +174,7 @@ snabbt för kunden och det ska se ut som att den skriver.
 ```json
 {
   "type": "text",
-  "platformId": "webchat",
+  "platformId": "comviq-web",
   "userId": "8a8b5c18-c0dd-467b-bd77-7e7685fadf6d",
   "text": "Bifogad bild:",
   "image": "data:image/jpeg;base64,/9j/4AAQSkZJRgAB+UinhpBuBqJlnCSSdoePgIDo//2Q=="
@@ -188,7 +188,7 @@ Meddelanden för att kunden ska veta att den blivit tilldelad en agent och kö.
 ```json
 {
   "type": "system_text",
-  "platformId": "webchat",
+  "platformId": "comviq-web",
   "userId": "8a8b5c18-c0dd-467b-bd77-7e7685fadf6d",
   "text": "Chatten har placerats i kön \"Com Hem allmänt\""
 }
@@ -201,7 +201,7 @@ Agenten klickar bort chatten som att den är klar med denna session.
 ```json
 {
   "type": "agent_done",
-  "platformId": "webchat",
+  "platformId": "comviq-web",
   "userId": "8a8b5c18-c0dd-467b-bd77-7e7685fadf6d"
 }
 ```
@@ -213,7 +213,7 @@ Agenten har börjat att skriva ett meddelande.
 ```json
 {
   "type": "typing_on",
-  "platformId": "webchat",
+  "platformId": "comviq-web",
   "userId": "8a8b5c18-c0dd-467b-bd77-7e7685fadf6d"
 }
 ```
@@ -225,7 +225,7 @@ Agenten har slutat att skriva ett meddelande. Innebär att de inte har skrivit p
 ```json
 {
   "type": "typing_off",
-  "platformId": "webchat",
+  "platformId": "comviq-web",
   "userId": "8a8b5c18-c0dd-467b-bd77-7e7685fadf6d"
 }
 ```
@@ -237,7 +237,7 @@ Skickas när den primära kön för en platform har stängts.
 ```json
 {
   "type": "platform_closed",
-  "platformId": "webchat",
+  "platformId": "comviq-web",
   "userId": "8a8b5c18-c0dd-467b-bd77-7e7685fadf6d"
 }
 ```
@@ -249,7 +249,7 @@ Sessionen lämnas över till Boten och den kör sina flöden.
 ```json
 {
   "type": "handover_to_bot",
-  "platformId": "webchat",
+  "platformId": "comviq-web",
   "userId": "8a8b5c18-c0dd-467b-bd77-7e7685fadf6d",
   "flowGroupId": "end"
 }
@@ -262,7 +262,7 @@ Här lämnar boten över till en agent via en kö.
 ```json
 {
   "type": "handover_to_agent",
-  "platformId": "webchat",
+  "platformId": "comviq-web",
   "userId": "8a8b5c18-c0dd-467b-bd77-7e7685fadf6d"
 }
 ```
