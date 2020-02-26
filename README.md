@@ -341,7 +341,7 @@ Internal event when bot or agent system have identified the customer.
   "type": "customer_identified",
   "platformId": "comhem-web",
   "userId": "8a8b5c18-c0dd-467b-bd77-7e7685fadf6d",
-  "brandId": "comviq",
+  "brandId": "comhem",
   "customerId": "1234567"
 }
 ```
