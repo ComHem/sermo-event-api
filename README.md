@@ -1,145 +1,205 @@
-# Sermo Events
+# Sermo Broker Events
 
-Det finns två separata köer där event skickas. En för "Inbound" och en för "Outbound".
+Three are three different queues used to send events.
 
-* "Inbound" är från vad kunderna gör.
-* "Outbound" är från vad boten och agenterna gör.
+* Inbound - for events sent from customer clients to the bot or agents.
+* Outbound - for events sent from bot and agent to customer clients.
+* Internal - for events sent between components except customer clients, like from bot to agent applications. 
 
-## Typiskt scenario
+## Example Scenarios
 
-### Standardflöde
+Following are example scenarios that are quite different to give a broad understanding on how the system works. Almost all are important to keep the AHT down so it is important that they are implemented. 
 
-1. Ett ny slutkund öppnar en chat och direkt så börjar det komma in `heartbeat`-events som visar att klienten är där.
-1. När kunden börjar skriva ett meddelande så skickas `typing`-event vilket gör det möljigt för Agent-GUI:et att lyssna in och visa agenten vad kunden skriver i realtid.
-1. När kunden skickar sitt första meddelande så kommer det som ett `text`-event med självaste texten.
-1. Boten läser meddelandet skickar ett svar i form av ett outbound `text`-event.
-1. Om Boten behöver lämna över till en agent så skickas ett `handover_to`-event.
-1. Avaya har lyssnat på alla event ovan och kan då visa agenten historiken.
-1. När agenten har skrivit ett meddelande så skickar Avaya ett outbound `text`-event.
-1. Kunden stänger chattfönstret vilket skickar ett `client_closed`-event.
+### Standard scenario
+
+1. A new customer opens a chat sessions from the web client and the web client starts sending [`heartbeat`](#inbound-heartbeat) events.
+1. When the customer is typing a message the inbound [`typing`](#inbound-typing) event is sent continuously enabling the agent application to show what the customer is typing before the message is sent.
+1. When the customer sends the first message, an inbound [`text`](#inbound-text) event is sent.
+1. The bot waits until the customer has not sent a message for 3 seconds before answering by sending an outbound [`text`](#outbound-text-from-bot) event.
+1. The bot identifies customer intent and who the customer is after which a [`identified_customer`](#customer_identified) event is sent out.
+1. The bot hands over to the agent application by sending the internal [`handover_to_agent`](#handover_to_agent) event.
+1. The agent application has been listening on all events above enabling for the future agent to see the bot-customer dialog.
+1. The agent application sends the outbound [`system_text`](#outbound-system_text) event telling the customer that the session has been placed in queue.
+1. The agent application sends the outbound [`queue_number`](#outbound-queue_number) event to show the customer current queue number. 
+1. When the agent starts typing in the agent GUI an outbound [`typing_on`](#outbound-typing_on) event is sent and when the agent stops typing an outbound [`typing_off`](#outbound-typing_off) is sent.  
+1. When the agent closes the session an outbound [`agent_done`](#outbound-agent_done) event is sent.
+1. When the customer closes the chat window an inbound [`client_left`](#inbound-client_left) event is sent.
+
+### The bot askes if the customer is still there 
+
+1. The bot finds out customer intent and who the customer is.  
+1. The bot handover the session by sending an internal [`handover_to_agent](#handover_to_agent) event and the session is added to the queue.
+1. When the session is first in line and the agent application suspects that the customer has left the agent application is handing over the session to the bot by using the [`handover_to_bot`](#handover_to_bot) event.
+1. The bot makes sure that the customer is still there and then handing the session back to the agent application by sending a [`handover_to_agent](#handover_to_agent) event.
+1. The agent application assigns the session to an agent as it would be first in line.
+
+### The bot ends a session for the agent
+
+1. A customer wants help with his invoice.  
+1. After agent has helped the customer the agent hands over the session to the bot to end the session in the name of the agent. The agent selects this option by clicking on a button dedicated for this purpose.
+1. The agent application hands over the session by sending the [`handover_to_bot`](#handover_to_bot) event with ```flowGroupId: 'end'```.
+1. The bot askes if the customer would like help with somethings and the customer have an addtional question regarding the invoice.
+1. So the bot hands the session back to the agent sending the [`handover_to_agent`](#handover_to_agent) event. The session pops back up for the same agent. The customer never noticed that he left the agent for a short while.  
+
+### Customer returns after agent closed session
+
+1. Efter att ha hjälpt kunden så klickar agenten bort sessionen och ett outbound [`agent_done`](#outbound-agent_done) event skickas. 
+1. Kunden får meddelandet att agenten har lämnat men om kunden vill fortsätta så är det bara att skicka ett till meddelande.  
+1. Kunden skickar ett nytt meddelande och inbound eventet [`text`-event](#inbound-text) skickas. 
+1. Kunden ställs i kö för nästa lediga plats. 
+
+### Count down current sessions for agent
+
+1. An agent is working on three sessions. 
+1. The agent application calculate the probabilities that the customer is still there for all three sessions. 
+1. Since the sum of all three probabilities add upp to 1.99 a new session is distributed to the agent.
 
 
-## "Inbound" (skickat från kunden)
+## Common event attributes
 
-Hur vi ser på eventen som skickas från kunderna.
+Following attributes are used for almost all events.
+- ```type``` sets which type of event it is, e.i. text, typing, heartbeat, handover, etc.
+- ```platformId``` is a unique id for the channel in which the customer has contacted us, e.i. comhem.se contact page, comhem.se assited sales or boxer.se contact page.
+- ```userId``` is an unique id for the customers/users. For the web a new unique id is generated for every new visit while for Messenger the user id connected to the account will be used which is persistent over time.
 
-### text
+## Inbound
 
-Vanliga meddelanden från kunden.
+Inbound events are events sent from customer to the bot or the agent application.
+
+### inbound text
+
+Inbound messages from the customer. 
 
 ```json
 {
   "type": "text",
-  "platformId": "comviq-web",
+  "platformId": "comhem-web",
   "userId": "8a8b5c18-c0dd-467b-bd77-7e7685fadf6d",
   "text": "Jag vill ändra faktura 70557076"
 }
 ```
 
-### text (med bild)
+### inbound text with image
 
-Meddelanden från kunden med en bifogad bild. Skickar med ett meddelande också som alltid visas med bilden.
+Inbound image from the customer with an appended text.
 
 ```json
 {
   "type": "text",
-  "platformId": "comviq-web",
+  "platformId": "comhem-web",
   "userId": "8a8b5c18-c0dd-467b-bd77-7e7685fadf6d",
   "text": "Bifogad bild:",
   "image": "data:image/jpeg;base64,/9j/4AAQSkZJRgAB+UinhpBuBqJlnCSSdoePgIDo//2Q=="
 }
 ```
 
-### heartbeat
+### inbound heartbeat
 
-Skickas från kunden för att kunna hålla koll på om kunden har en stabil uppkoppling.
+Inbound heartbeat is sent from the customer client so that the system can track the stability of the connection and if the customer is still there.
 
 ```json
 {
   "type": "heartbeat",
-  "platformId": "comviq-web",
+  "platformId": "comhem-web",
   "userId": "8a8b5c18-c0dd-467b-bd77-7e7685fadf6d"
 }
 ```
 
-### messages_read
+### inbound messages_read
 
-Skickar en timestamp när kunden senast har läst ett meddelande.
+A n inbound event with a timestamp on when the message was red by the customer. 
 
 ```json
 {
   "type": "messages_read",
-  "platformId": "comviq-web",
+  "platformId": "comhem-web",
   "userId": "8a8b5c18-c0dd-467b-bd77-7e7685fadf6d",
   "text": "read",
   "at": "2020-02-18T12:14:11.386Z"
 }
 ```
 
-### client_left
+### inbound client_left
 
-Kunden har tryckt på krysset i iFramen och bekräftat att den vill lämna chatten.
+The customer has clicked on the x in the client to close the chat session. 
 
 ```json
 {
   "type": "client_left",
-  "platformId": "comviq-web",
+  "platformId": "comhem-web",
   "userId": "8a8b5c18-c0dd-467b-bd77-7e7685fadf6d",
   "text": "Kunden har stängt chatten.",
   "at": "2020-02-18T12:12:33.766Z"
 }
 ```
 
-### client_unload
+### inbound client_unload
 
-Kunden har stängt ner fliken den har chatten i. Använder https://developer.mozilla.org/en-US/docs/Web/API/Window/unload_event.
+The customer has closed browser or refreshed to page. Using https://developer.mozilla.org/en-US/docs/Web/API/Window/unload_event to detect this.
 
 ```json
 {
   "type": "client_unload",
-  "platformId": "comviq-web",
+  "platformId": "comhem-web",
   "userId": "8a8b5c18-c0dd-467b-bd77-7e7685fadf6d",
   "at": "2020-02-18T12:10:18.968Z"
 }
 ```
 
-### typing
+### inbound typing
 
-Skickas nuvarande text kunden har skrivit till agenten innan meddelandet har skickats.
+The inbound typing event is sent continously when the customer is typing. This will enable the agent to see what the customer is about to send.
 
 ```json
 {
   "type": "typing",
-  "platformId": "comviq-web",
+  "platformId": "comhem-web",
   "userId": "8a8b5c18-c0dd-467b-bd77-7e7685fadf6d",
   "text": "Hej, jag mitt na",
   "at": "2020-02-18T14:41:37.571Z"
 }
 ```
 
-## "Outbound" (skickat från agenten)
+### inbound assisted_sales_identifier
 
-Hur vi ser på eventen som skickas från agenterna.
+Assisted sales identifier event with sales lead id and session id.
 
-### queue_number
+```json
+{
+  "type": "assisted_sales_identifier",
+  "platformId": "comhem-web",
+  "userId": "89462d14-f96c-4cc1-85b2-9fa8ad8eb961",
+  "niSalesLeadId": "123-abc",
+  "niSessionId": "456-def"
+}
+```
 
-Skickas när kunden placeras i en kö. Skickas ut ett könummer.
+
+## Outbound
+
+Outbound events are events sent from the bot or the agent to the customer. 
+
+### outbound queue_number
+
+Is sent when the customer is in the queue enabling the customer client to display the queue number for the customer. 
 
 ```json
 {
   "type": "queue_number",
-  "platformId": "comviq-web",
+  "platformId": "comhem-web",
   "userId": "8a8b5c18-c0dd-467b-bd77-7e7685fadf6d",
   "queueNumber": 1
 }
 ```
 
-### text
+### outbound text
+
+Outbound text from the agent to a customer.
 
 ```json
 {
   "type": "text",
-  "platformId": "comviq-web",
+  "platformId": "comhem-web",
   "userId": "8a8b5c18-c0dd-467b-bd77-7e7685fadf6d",
   "text": "Jag skickar ett SMS till dig nu med betalningsuppgifterna, det kommer plinga i din telefonen inom en minut.",
   "agent": {
@@ -150,15 +210,14 @@ Skickas när kunden placeras i en kö. Skickas ut ett könummer.
 }
 ```
 
-### text (från Boten)
+### outbound text from bot
 
-Boten har en simulerad "typing" för att svaret inte ska dyka upp för
-snabbt för kunden och det ska se ut som att den skriver.
+Outbound text sent from the bot to the customer. The client will simulate the typing for given number of milliseconds before displaying the message.
 
 ```json
 {
   "type": "text",
-  "platformId": "comviq-web",
+  "platformId": "comhem-web",
   "userId": "8a8b5c18-c0dd-467b-bd77-7e7685fadf6d",
   "text": "Hej!",
   "typing": 1000,
@@ -169,100 +228,120 @@ snabbt för kunden och det ska se ut som att den skriver.
 }
 ```
 
-### text (med bild)
+### outbound text with image
+
+Outbound image sent from the agent to the customer.
 
 ```json
 {
   "type": "text",
-  "platformId": "comviq-web",
+  "platformId": "comhem-web",
   "userId": "8a8b5c18-c0dd-467b-bd77-7e7685fadf6d",
   "text": "Bifogad bild:",
   "image": "data:image/jpeg;base64,/9j/4AAQSkZJRgAB+UinhpBuBqJlnCSSdoePgIDo//2Q=="
 }
 ```
 
-### system_text
+### outbound system_text
 
-Meddelanden för att kunden ska veta att den blivit tilldelad en agent och kö.
+Outbound system event from the agent or bot to a customer.
 
 ```json
 {
   "type": "system_text",
-  "platformId": "comviq-web",
+  "platformId": "comhem-web",
   "userId": "8a8b5c18-c0dd-467b-bd77-7e7685fadf6d",
   "text": "Chatten har placerats i kön \"Com Hem allmänt\""
 }
 ```
 
-### agent_done
+### outbound agent_done
 
-Agenten klickar bort chatten som att den är klar med denna session.
+Outbound event sent when the customer closes the session. 
 
 ```json
 {
   "type": "agent_done",
-  "platformId": "comviq-web",
+  "platformId": "comhem-web",
   "userId": "8a8b5c18-c0dd-467b-bd77-7e7685fadf6d"
 }
 ```
 
-### typing_on
+### outbound typing_on
 
-Agenten har börjat att skriva ett meddelande.
+Outbound event sent when the agent started typing a message.
 
 ```json
 {
   "type": "typing_on",
-  "platformId": "comviq-web",
+  "platformId": "comhem-web",
   "userId": "8a8b5c18-c0dd-467b-bd77-7e7685fadf6d"
 }
 ```
 
-### typing_off
+### outbound typing_off
 
-Agenten har slutat att skriva ett meddelande. Innebär att de inte har skrivit på några sekunder.
+Outbound event sent when the agent stoped typing a message.
 
 ```json
 {
   "type": "typing_off",
-  "platformId": "comviq-web",
+  "platformId": "comhem-web",
   "userId": "8a8b5c18-c0dd-467b-bd77-7e7685fadf6d"
 }
 ```
 
-### platform_closed
+### outbound platform_closed
 
-Skickas när den primära kön för en platform har stängts.
+Is sent by the agent application when a platform is closed to customer enabling the customer client to tell the customer. 
 
 ```json
 {
   "type": "platform_closed",
-  "platformId": "comviq-web",
+  "platformId": "comhem-web",
+  "userId": "8a8b5c18-c0dd-467b-bd77-7e7685fadf6d"
+}
+```
+
+## Internal events
+
+Internal events are events sent between internal broker clients, that is not from an to customer clients.
+
+### handover_to_agent
+
+Internal event used when a session needs to be handed over from bot to agent.
+
+```json
+{
+  "type": "handover_to_agent",
+  "platformId": "comhem-web",
   "userId": "8a8b5c18-c0dd-467b-bd77-7e7685fadf6d"
 }
 ```
 
 ### handover_to_bot
 
-Sessionen lämnas över till Boten och den kör sina flöden.
+Internal event used when a session needs to be handed over from agent to bot.
 
 ```json
 {
   "type": "handover_to_bot",
-  "platformId": "comviq-web",
+  "platformId": "comhem-web",
   "userId": "8a8b5c18-c0dd-467b-bd77-7e7685fadf6d",
   "flowGroupId": "end"
 }
 ```
 
-### handover_to_agent
+### customer_identified
 
-Här lämnar boten över till en agent via en kö.
+Internal event when bot or agent system have identified the customer.
 
 ```json
 {
-  "type": "handover_to_agent",
-  "platformId": "comviq-web",
-  "userId": "8a8b5c18-c0dd-467b-bd77-7e7685fadf6d"
+  "type": "customer_identified",
+  "platformId": "comhem-web",
+  "userId": "8a8b5c18-c0dd-467b-bd77-7e7685fadf6d",
+  "brandId": "comviq",
+  "customerId": "1234567"
 }
 ```
