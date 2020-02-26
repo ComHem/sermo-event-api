@@ -1,4 +1,10 @@
-# Sermo Broker Events
+# One Messaging Architecture
+
+![One Messaging Architecture](./one-messaging-architecture.png)
+
+Events sent to the broker will be sent to all other clients. This will enable clients to listen to the events it needs to in order to fullfill its responsibility. It is important that all clients can handle new events without breaking.
+
+# Broker Events
 
 Three are three different queues used to send events.
 
