@@ -60,6 +60,11 @@ Following are example scenarios that are quite different to give a broad underst
 1. The agent application calculate the probabilities that the customer is still there for all three sessions. 
 1. Since the sum of all three probabilities add upp to 1.99 a new session is distributed to the agent.
 
+### An assisted sales session is started in Sermo and handed over to LiveChat
+
+1. Am assosted sales session is started in Sermo but the agent realizes that the customer want support help, not sales help. 
+1. LiveChat has been listening on all events above enabling for the future agent in LiveChat to see the previous dialog.
+1. Agent in Sermo clicks on a transfer-to-livechat button in Sermo and a [`transfer_to_agent_application`](#transfer_to_agent_application) event is sent.
 
 ## Common event attributes
 
@@ -335,6 +340,19 @@ Internal event used when a session needs to be handed over from agent to bot.
   "platformId": "comhem-web",
   "userId": "8a8b5c18-c0dd-467b-bd77-7e7685fadf6d",
   "flowGroupId": "end"
+}
+```
+
+### transfer_to_agent_application
+
+Internal event used when a session needs to be transfered from one agent application to anogher.
+
+```json
+{
+  "type": "transfer_to_agent_application",
+  "platformId": "comhem-web",
+  "userId": "8a8b5c18-c0dd-467b-bd77-7e7685fadf6d",
+  "toAgentApplication": "live-chat"
 }
 ```
 
