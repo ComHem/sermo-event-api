@@ -1,3 +1,5 @@
+[Sermo JavaScript Bundle documentation](./sermo-bundle.md)
+
 # One Messaging Architecture
 
 ![One Messaging Architecture](./one-messaging-architecture.png)
@@ -10,11 +12,11 @@ Three are three different queues used to send events.
 
 * Inbound - for events sent from customer clients to the bot or agents.
 * Outbound - for events sent from bot and agent to customer clients.
-* Internal - for events sent between components except customer clients, like from bot to agent applications. 
+* Internal - for events sent between components except customer clients, like from bot to agent applications.
 
 ## Example Scenarios
 
-Following are example scenarios that are quite different to give a broad understanding on how the system works. Almost all are important to keep the AHT down so it is important that they are implemented. 
+Following are example scenarios that are quite different to give a broad understanding on how the system works. Almost all are important to keep the AHT down so it is important that they are implemented.
 
 ### Standard scenario
 
@@ -26,14 +28,14 @@ Following are example scenarios that are quite different to give a broad underst
 1. The bot hands over to the agent application by sending the internal [`handover_to_agent`](#handover_to_agent) event.
 1. The agent application has been listening on all events above enabling for the future agent to see the previous dialog.
 1. The agent application sends the outbound [`system_text`](#outbound-system_text) event telling the customer that the session has been placed in queue.
-1. The agent application sends the outbound [`queue_number`](#outbound-queue_number) event to show the customer current queue number. 
-1. When the agent starts typing in the agent GUI an outbound [`typing_on`](#outbound-typing_on) event is sent and when the agent stops typing an outbound [`typing_off`](#outbound-typing_off) is sent.  
+1. The agent application sends the outbound [`queue_number`](#outbound-queue_number) event to show the customer current queue number.
+1. When the agent starts typing in the agent GUI an outbound [`typing_on`](#outbound-typing_on) event is sent and when the agent stops typing an outbound [`typing_off`](#outbound-typing_off) is sent.
 1. When the agent closes the session an outbound [`agent_done`](#outbound-agent_done) event is sent.
 1. When the customer closes the chat window an inbound [`client_left`](#inbound-client_left) event is sent.
 
-### The bot asks if the customer is still there 
+### The bot asks if the customer is still there
 
-1. The bot identifies customer intent and who the customer is.  
+1. The bot identifies customer intent and who the customer is.
 1. The bot handover the session by sending an internal [`handover_to_agent`](#handover_to_agent) event and the session is added to the queue.
 1. When the session is first in line and the agent application suspects that the customer has left the agent application is handing over the session to the bot by using the [`handover_to_bot`](#handover_to_bot) event.
 1. The bot makes sure that the customer is still there and then handing the session back to the agent application by sending a [`handover_to_agent`](#handover_to_agent) event.
@@ -41,28 +43,29 @@ Following are example scenarios that are quite different to give a broad underst
 
 ### The bot ends a session for the agent
 
-1. A customer wants help with an invoice.  
+1. A customer wants help with an invoice.
 1. After agent has helped the customer the agent hands over the session to the bot to end the session in the name of the agent. The agent selects this option by clicking on a button dedicated for this purpose.
 1. The agent application hands over the session by sending the [`handover_to_bot`](#handover_to_bot) event with ```flowGroupId: 'end'```.
 1. The bot asks if the customer would like help with somethings and the customer have an additional question regarding the invoice.
-1. So the bot hands the session back to the agent sending the [`handover_to_agent`](#handover_to_agent) event. The session pops back up for the same agent. The customer never noticed that he left the agent for a short while.  
+1. So the bot hands the session back to the agent sending the [`handover_to_agent`](#handover_to_agent) event. The session pops back up for the same agent. The customer never noticed that he left the agent for a short while.
 
 ### Customer returns after agent closed session
 
-1. After the agent has helped the customer the agent clicks down the session and an outbound [`agent_done`](#outbound-agent_done) event is sent out.  
-1. The customer receives a message that the agent has left the session and if the customer want to get in contact again, it is only to send a new message.  
-1. The customer sends a new message generating an inbound [`text`](#inbound-text) event.  
+1. After the agent has helped the customer the agent clicks down the session and an outbound [`agent_done`](#outbound-agent_done) event is sent out.
+1. The customer receives a message that the agent has left the session and if the customer want to get in contact again, it is only to send a new message.
+1. The customer sends a new message generating an inbound [`text`](#inbound-text) event.
 1. The customer is put into the queue first in line.
 
 ### Count down current sessions for agent
 
-1. An agent is working on three sessions. 
-1. The agent application calculate the probabilities that the customer is still there for all three sessions. 
+1. An agent is working on three sessions.
+1. The agent application calculate the probabilities that the customer is still there for all three sessions.
 1. Since the sum of all three probabilities add upp to 1.99 a new session is distributed to the agent.
+
 
 ### An assisted sales session is started in Sermo and handed over to LiveChat
 
-1. Am assosted sales session is started in Sermo but the agent realizes that the customer want support help, not sales help. 
+1. Am assosted sales session is started in Sermo but the agent realizes that the customer want support help, not sales help.
 1. LiveChat has been listening on all events above enabling for the future agent in LiveChat to see the previous dialog.
 1. Agent in Sermo clicks on a transfer-to-livechat button in Sermo and a [`transfer_to_agent_application`](#transfer_to_agent_application) event is sent.
 
@@ -79,7 +82,7 @@ Inbound events are events sent from customer to the bot or the agent application
 
 ### inbound text
 
-Inbound messages from the customer. 
+Inbound messages from the customer.
 
 ```json
 {
@@ -118,7 +121,7 @@ Inbound heartbeat is sent from the customer client so that the system can track 
 
 ### inbound messages_read
 
-An inbound event with a timestamp on when the message was red by the customer. 
+An inbound event with a timestamp on when the message was red by the customer.
 
 ```json
 {
@@ -132,7 +135,7 @@ An inbound event with a timestamp on when the message was red by the customer.
 
 ### inbound client_left
 
-The customer has clicked down the chat window to close the chat. 
+The customer has clicked down the chat window to close the chat.
 
 ```json
 {
@@ -188,11 +191,11 @@ Assisted sales identifier event with sales lead id and session id.
 
 ## Outbound
 
-Outbound events are events sent from the bot or the agent to the customer. 
+Outbound events are events sent from the bot or the agent to the customer.
 
 ### outbound queue_number
 
-Is sent when the customer is in the queue enabling the customer client to display the queue number for the customer. 
+Is sent when the customer is in the queue enabling the customer client to display the queue number for the customer.
 
 ```json
 {
@@ -268,7 +271,7 @@ Outbound system event from the agent or bot to a customer.
 
 ### outbound agent_done
 
-Outbound event sent when the customer closes the session. 
+Outbound event sent when the customer closes the session.
 
 ```json
 {
@@ -304,7 +307,7 @@ Outbound event sent when the agent stopped typing a message.
 
 ### outbound platform_closed
 
-Is sent by the agent application when a platform is closed to customer enabling the customer client to tell the customer. 
+Is sent by the agent application when a platform is closed to customer enabling the customer client to tell the customer.
 
 ```json
 {
