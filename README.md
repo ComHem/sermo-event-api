@@ -10,9 +10,9 @@ Events sent to the broker will be sent to all other clients. This will enable cl
 
 Three are three different queues used to send events.
 
-* Inbound - for events sent from customer clients to the bot or agents.
-* Outbound - for events sent from bot and agent to customer clients.
-* Internal - for events sent between components except customer clients, like from bot to agent applications.
+- Inbound - for events sent from customer clients to the bot or agents.
+- Outbound - for events sent from bot and agent to customer clients.
+- Internal - for events sent between components except customer clients, like from bot to agent applications.
 
 ## Example Scenarios
 
@@ -45,7 +45,7 @@ Following are example scenarios that are quite different to give a broad underst
 
 1. A customer wants help with an invoice.
 1. After agent has helped the customer the agent hands over the session to the bot to end the session in the name of the agent. The agent selects this option by clicking on a button dedicated for this purpose.
-1. The agent application hands over the session by sending the [`handover_to_bot`](#handover_to_bot) event with ```flowGroupId: 'end'```.
+1. The agent application hands over the session by sending the [`handover_to_bot`](#handover_to_bot) event with `flowGroupId: 'end'`.
 1. The bot asks if the customer would like help with somethings and the customer have an additional question regarding the invoice.
 1. So the bot hands the session back to the agent sending the [`handover_to_agent`](#handover_to_agent) event. The session pops back up for the same agent. The customer never noticed that he left the agent for a short while.
 
@@ -62,7 +62,6 @@ Following are example scenarios that are quite different to give a broad underst
 1. The agent application calculate the probabilities that the customer is still there for all three sessions.
 1. Since the sum of all three probabilities add upp to 1.99 a new session is distributed to the agent.
 
-
 ### An assisted sales session is started in Sermo and handed over to LiveChat
 
 1. Am assosted sales session is started in Sermo but the agent realizes that the customer want support help, not sales help.
@@ -72,9 +71,10 @@ Following are example scenarios that are quite different to give a broad underst
 ## Common event attributes
 
 Following attributes are used for almost all events.
-- ```type``` sets which type of event it is, e.i. text, typing, heartbeat, handover, etc.
-- ```platformId``` is a unique id for the channel in which the customer has contacted us, e.i. comhem.se contact page, comhem.se assited sales or boxer.se contact page.
-- ```userId``` is an unique id for the customers/users. For the web a new unique id is generated for every new visit while for Messenger the user id connected to the facebook account will be used which is persistent over time.
+
+- `type` sets which type of event it is, e.i. text, typing, heartbeat, handover, etc.
+- `platformId` is a unique id for the channel in which the customer has contacted us, e.i. comhem.se contact page, comhem.se assited sales or boxer.se contact page.
+- `userId` is an unique id for the customers/users. For the web a new unique id is generated for every new visit while for Messenger the user id connected to the facebook account will be used which is persistent over time.
 
 ## Inbound
 
@@ -188,7 +188,6 @@ Assisted sales identifier event with sales lead id and session id.
 }
 ```
 
-
 ## Outbound
 
 Outbound events are events sent from the bot or the agent to the customer.
@@ -219,7 +218,8 @@ Outbound text from the agent to a customer.
   "agent": {
     "id": "anan01",
     "name": "Anders Andersson",
-    "type": "human"
+    "type": "human",
+    "avatarId": "avatar1"
   }
 }
 ```
@@ -237,7 +237,8 @@ Outbound text sent from the bot to the customer. The client will simulate the ty
   "typing": 1000,
   "agent": {
     "id": "bot",
-    "name": "Bot"
+    "name": "Bot",
+    "avatarId": "avatar1"
   }
 }
 ```
