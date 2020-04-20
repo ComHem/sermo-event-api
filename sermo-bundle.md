@@ -88,3 +88,51 @@ A message will be sent through `window.postMessage` when the Sermo chat window h
 }
 ```
 
+## Events that the Sermo Bundle will listen for
+
+In addition to the event to start a chat the Sermo bundle will listen for more events.
+Customer identification and order placement will be used to connect chat sessions to what the customer does on the website during the chat session and after.
+
+## The user has logged in on "My Pages"
+
+Send a message through `window.postMessage` with a payload of this format:
+
+```json
+{
+  "sender": "WEBSITE_BRAND",
+  "receiver": "sermo",
+  "event": "CUSTOMER_IDENTIFIED",
+  "customerId": "12345678"
+}
+```
+
+## The user has placed an order
+
+Send a message through `window.postMessage` with a payload of this format:
+
+```json
+{
+  "sender": "WEBSITE_BRAND",
+  "receiver": "sermo",
+  "event": "ORDER_PLACED",
+  "customerId": "12345678",
+  "ssn": "190001011234",
+  "purchaseId": "499d2848150",
+  "products": [
+    {
+      "id": "BBG062",
+      "name": "Bredband 300",
+      "category": "Broadband - Base subscription - New customer",
+      "price": 5988,
+      "quantity": 1
+    },
+    {
+      "id": "3101",
+      "name": "Wi-Fi Hub",
+      "category": "Broadband - Equipment - New customer",
+      "price": 0,
+      "quantity": 1
+    }
+  ]
+}
+```
