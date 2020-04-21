@@ -136,3 +136,61 @@ Send a message through `window.postMessage` with a payload of this format:
   ]
 }
 ```
+
+# Alternative APIs
+
+## window.postMessage
+
+Using the https://developer.mozilla.org/en-US/docs/Web/API/Window/postMessage method.
+
+```js
+function emit() {
+  window.postMessage({ 
+    sender: "WEBSITE_BRAND",
+    receiver: "sermo",
+    event: "START_SALES_CHAT",
+    customerId: "12345678",
+    niSalesLeadId: "lead-123",
+    niSessionId: "session-123",
+    maxZIndex: 1501
+  });
+}
+```
+
+## window.dispatchEvent
+
+https://developer.mozilla.org/en-US/docs/Web/API/EventTarget/dispatchEvent on the window object with a CustomEvent.
+
+```js
+function emit() {
+  window.dispatchEvent(new CustomEvent("midas", {
+    detail: { 
+      sender: "WEBSITE_BRAND",
+      receiver: "sermo",
+      event: "START_SALES_CHAT",
+      customerId: "12345678",
+      niSalesLeadId: "lead-123",
+      niSessionId: "session-123",
+      maxZIndex: 1501
+    }
+  });
+}
+```
+
+## Midas object/function on the window.
+
+Attach a midas function or object on the window that can be used to dispatch events to midas.
+
+```js
+function emit() {
+  window.midas && window.midas.dispatch({
+    sender: "WEBSITE_BRAND",
+    receiver: "sermo",
+    event: "START_SALES_CHAT",
+    customerId: "12345678",
+    niSalesLeadId: "lead-123",
+    niSessionId: "session-123",
+    maxZIndex: 1501
+  });
+}
+```
