@@ -88,6 +88,7 @@ Inbound messages from the customer.
 ```json
 {
   "type": "text",
+  "direction": "inbound",
   "platformId": "comhem-web",
   "userId": "8a8b5c18-c0dd-467b-bd77-7e7685fadf6d",
   "text": "Jag vill ändra faktura 70557076"
@@ -101,6 +102,7 @@ Inbound image from the customer with an appended text.
 ```json
 {
   "type": "text",
+  "direction": "inbound",
   "platformId": "comhem-web",
   "userId": "8a8b5c18-c0dd-467b-bd77-7e7685fadf6d",
   "text": "Bifogad bild:",
@@ -115,6 +117,7 @@ Inbound heartbeat is sent from the customer client so that the system can track 
 ```json
 {
   "type": "heartbeat",
+  "direction": "inbound",
   "platformId": "comhem-web",
   "userId": "8a8b5c18-c0dd-467b-bd77-7e7685fadf6d"
 }
@@ -127,6 +130,7 @@ An inbound event with a timestamp on when the message was red by the customer.
 ```json
 {
   "type": "messages_read",
+  "direction": "inbound",
   "platformId": "comhem-web",
   "userId": "8a8b5c18-c0dd-467b-bd77-7e7685fadf6d",
   "text": "read",
@@ -141,6 +145,7 @@ The customer has clicked down the chat window to close the chat.
 ```json
 {
   "type": "client_left",
+  "direction": "inbound",
   "platformId": "comhem-web",
   "userId": "8a8b5c18-c0dd-467b-bd77-7e7685fadf6d",
   "text": "Kunden har stängt chatten.",
@@ -155,6 +160,7 @@ The customer has closed the browser, the tab, or refreshed to page. Using https:
 ```json
 {
   "type": "client_unload",
+  "direction": "inbound",
   "platformId": "comhem-web",
   "userId": "8a8b5c18-c0dd-467b-bd77-7e7685fadf6d",
   "at": "2020-02-18T12:10:18.968Z"
@@ -168,6 +174,7 @@ The inbound typing event is sent continuously when the customer is typing. This 
 ```json
 {
   "type": "typing",
+  "direction": "inbound",
   "platformId": "comhem-web",
   "userId": "8a8b5c18-c0dd-467b-bd77-7e7685fadf6d",
   "text": "Hej, jag mitt na",
@@ -182,6 +189,7 @@ Assisted sales identifier event with sales lead id and session id.
 ```json
 {
   "type": "assisted_sales_identifier",
+  "direction": "inbound",
   "platformId": "comhem-web",
   "userId": "89462d14-f96c-4cc1-85b2-9fa8ad8eb961",
   "niSalesLeadId": "123-abc",
@@ -200,6 +208,7 @@ Is sent when the customer is in the queue enabling the customer client to displa
 ```json
 {
   "type": "queue_number",
+  "direction": "outbound",
   "platformId": "comhem-web",
   "userId": "8a8b5c18-c0dd-467b-bd77-7e7685fadf6d",
   "queueNumber": 1
@@ -213,6 +222,7 @@ Outbound text from the agent to a customer.
 ```json
 {
   "type": "text",
+  "direction": "outbound",
   "platformId": "comhem-web",
   "userId": "8a8b5c18-c0dd-467b-bd77-7e7685fadf6d",
   "text": "Jag skickar ett SMS till dig nu med betalningsuppgifterna, det kommer plinga i din telefonen inom en minut.",
@@ -232,6 +242,7 @@ Outbound text sent from the bot to the customer. The client will simulate the ty
 ```json
 {
   "type": "text",
+  "direction": "outbound",
   "platformId": "comhem-web",
   "userId": "8a8b5c18-c0dd-467b-bd77-7e7685fadf6d",
   "text": "Hej!",
@@ -251,6 +262,7 @@ Outbound image sent from the agent to the customer.
 ```json
 {
   "type": "text",
+  "direction": "outbound",
   "platformId": "comhem-web",
   "userId": "8a8b5c18-c0dd-467b-bd77-7e7685fadf6d",
   "text": "Bifogad bild:",
@@ -265,6 +277,7 @@ Outbound system event from the agent or bot to a customer.
 ```json
 {
   "type": "system_text",
+  "direction": "outbound",
   "platformId": "comhem-web",
   "userId": "8a8b5c18-c0dd-467b-bd77-7e7685fadf6d",
   "text": "Chatten har placerats i kön \"Com Hem allmänt\""
@@ -278,6 +291,7 @@ Outbound event sent when the customer closes the session.
 ```json
 {
   "type": "agent_done",
+  "direction": "outbound",
   "platformId": "comhem-web",
   "userId": "8a8b5c18-c0dd-467b-bd77-7e7685fadf6d"
 }
@@ -290,6 +304,7 @@ Outbound event sent when the agent started typing a message.
 ```json
 {
   "type": "typing_on",
+  "direction": "outbound",
   "platformId": "comhem-web",
   "userId": "8a8b5c18-c0dd-467b-bd77-7e7685fadf6d"
 }
@@ -302,6 +317,7 @@ Outbound event sent when the agent stopped typing a message.
 ```json
 {
   "type": "typing_off",
+  "direction": "outbound",
   "platformId": "comhem-web",
   "userId": "8a8b5c18-c0dd-467b-bd77-7e7685fadf6d"
 }
@@ -314,6 +330,7 @@ Is sent by the agent application when a platform is closed to customer enabling 
 ```json
 {
   "type": "platform_closed",
+  "direction": "outbound",
   "platformId": "comhem-web",
   "userId": "8a8b5c18-c0dd-467b-bd77-7e7685fadf6d"
 }
@@ -330,6 +347,7 @@ Internal event used when a session needs to be handed over from bot to agent.
 ```json
 {
   "type": "handover_to_agent",
+  "direction": "internal",
   "platformId": "comhem-web",
   "userId": "8a8b5c18-c0dd-467b-bd77-7e7685fadf6d"
 }
@@ -342,6 +360,7 @@ Internal event used when a session needs to be handed over from agent to bot.
 ```json
 {
   "type": "handover_to_bot",
+  "direction": "internal",
   "platformId": "comhem-web",
   "userId": "8a8b5c18-c0dd-467b-bd77-7e7685fadf6d",
   "flowGroupId": "end"
@@ -355,6 +374,7 @@ Internal event used when a session needs to be transfered from one queue to anot
 ```json
 {
   "type": "handover_to_queue",
+  "direction": "internal",
   "platformId": "comhem-web",
   "queueId": "comviq_support",
   "userId": "8a8b5c18-c0dd-467b-bd77-7e7685fadf6d",
@@ -368,6 +388,7 @@ Internal event when bot or agent system have identified the customer.
 ```json
 {
   "type": "customer_identified",
+  "direction": "internal",
   "platformId": "comhem-web",
   "userId": "8a8b5c18-c0dd-467b-bd77-7e7685fadf6d",
   "brandId": "comhem",
