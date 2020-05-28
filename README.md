@@ -219,6 +219,8 @@ Is sent when the customer is in the queue enabling the customer client to displa
 
 Outbound text from the agent to a customer.
 
+The avatarId and avatarUrl property of the agent is optional. If none of these two are passed sermo will default to a icon-avatar.
+
 ```json
 {
   "type": "text",
@@ -230,7 +232,8 @@ Outbound text from the agent to a customer.
     "id": "anan01",
     "name": "Anders Andersson",
     "type": "human",
-    "avatarId": "avatar1"
+    "avatarId": "avatar1",
+    "avatarUrl": "https://some-url.png"
   }
 }
 ```
@@ -250,7 +253,8 @@ Outbound text sent from the bot to the customer. The client will simulate the ty
   "agent": {
     "id": "bot",
     "name": "Bot",
-    "avatarId": "avatar1"
+    "avatarId": "avatar1",
+    "avatarUrl": "https://some-url.png"
   }
 }
 ```
