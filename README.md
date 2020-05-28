@@ -27,7 +27,7 @@ Following are example scenarios that are quite different to give a broad underst
 1. The bot identifies customer intent and who the customer is after which a [`identified_customer`](#customer_identified) event is sent out.
 1. The bot hands over to the agent application by sending the internal [`handover_to_agent`](#handover_to_agent) event.
 1. The agent application has been listening on all events above enabling for the future agent to see the previous dialog.
-1. The agent application sends the outbound [`system_text`](#outbound-system_text) event telling the customer that the session has been placed in queue.
+1. The agent application sends the outbound [`info`](#outbound-info) event telling the customer that the session has been placed in queue.
 1. The agent application sends the outbound [`queue_number`](#outbound-queue_number) event to show the customer current queue number.
 1. When the agent starts typing in the agent GUI an outbound [`typing_on`](#outbound-typing_on) event is sent and when the agent stops typing an outbound [`typing_off`](#outbound-typing_off) is sent.
 1. When the agent closes the session an outbound [`agent_done`](#outbound-agent_done) event is sent.
@@ -274,13 +274,13 @@ Outbound image sent from the agent to the customer.
 }
 ```
 
-### outbound system_text
+### outbound info 
 
 Outbound system event from the agent or bot to a customer.
 
 ```json
 {
-  "type": "system_text",
+  "type": "info",
   "direction": "outbound",
   "platformId": "comhem-web",
   "userId": "8a8b5c18-c0dd-467b-bd77-7e7685fadf6d",
