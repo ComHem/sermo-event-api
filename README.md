@@ -219,6 +219,8 @@ Is sent when the customer is in the queue enabling the customer client to displa
 
 Outbound text from the agent to a customer.
 
+The avatarId and avatarUrl property of the agent is optional. If none of these two are passed sermo will default to a icon-avatar.
+
 ```json
 {
   "type": "text",
