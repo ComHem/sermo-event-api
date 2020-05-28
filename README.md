@@ -230,7 +230,8 @@ Outbound text from the agent to a customer.
     "id": "anan01",
     "name": "Anders Andersson",
     "type": "human",
-    "avatarId": "avatar1"
+    "avatarId": "avatar1",
+    "avatarUrl": "https://some-url.png"
   }
 }
 ```
@@ -250,7 +251,8 @@ Outbound text sent from the bot to the customer. The client will simulate the ty
   "agent": {
     "id": "bot",
     "name": "Bot",
-    "avatarId": "avatar1"
+    "avatarId": "avatar1",
+    "avatarUrl": "https://some-url.png"
   }
 }
 ```
