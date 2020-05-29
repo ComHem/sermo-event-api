@@ -67,6 +67,7 @@ Following are example scenarios that are quite different to give a broad underst
 1. An assisted sales session is started in Sermo but the agent realizes that the customer want support help, not sales help.
 1. LiveChat has been listening on all events above enabling for the future agent in LiveChat to see the previous dialog.
 1. Agent in Sermo clicks on a transfer-to-queue drop down in Sermo and selects Comviq Teknisk Support. A [`handover_to_queue`](#handover_to_queue) event is sent with comviq_support as a target queue.
+1. When livechat sees the hand over event, livechat claims the session by sending a [`claim_session`](#claim_session) event so Sermo knows that the session is being handled.
 1. LiveChat is now in possesion of the session in question and deals with it as seen fit.
 
 ## Common event attributes
@@ -382,6 +383,17 @@ Internal event used when a session needs to be transfered from one queue to anot
   "platformId": "comhem-web",
   "queueId": "comviq_support",
   "userId": "8a8b5c18-c0dd-467b-bd77-7e7685fadf6d",
+}
+```
+
+### claim_session
+```json
+{
+  "type": "claim_session",
+  "direction": "internal",
+  "platformId": "comhem-web",
+  "userId": "8a8b5c18-c0dd-467b-bd77-7e7685fadf6d",
+  "agentId": "some-agent"
 }
 ```
 
