@@ -30,7 +30,7 @@ Following are example scenarios that are quite different to give a broad underst
 1. The agent application sends the outbound [`info`](#outbound-info) event telling the customer that the session has been placed in queue.
 1. The agent application sends the outbound [`queue_number`](#outbound-queue_number) event to show the customer current queue number.
 1. When the agent starts typing in the agent GUI an outbound [`typing_on`](#outbound-typing_on) event is sent and when the agent stops typing an outbound [`typing_off`](#outbound-typing_off) is sent.
-1. When the agent closes the session an outbound [`agent_done`](#outbound-agent_done) event is sent.
+1. When the agent closes the session an internal [`agent_done`](#agent_done) event is sent.
 1. When the customer closes the chat window an inbound [`client_left`](#inbound-client_left) event is sent.
 
 ### The bot asks if the customer is still there
@@ -51,7 +51,7 @@ Following are example scenarios that are quite different to give a broad underst
 
 ### Customer returns after agent closed session
 
-1. After the agent has helped the customer the agent clicks down the session and an outbound [`agent_done`](#outbound-agent_done) event is sent out.
+1. After the agent has helped the customer the agent clicks down the session and an internal [`agent_done`](#agent_done) event is sent out.
 1. The customer receives a message that the agent has left the session and if the customer want to get in contact again, it is only to send a new message.
 1. The customer sends a new message generating an inbound [`text`](#inbound-text) event.
 1. The customer is put into the queue first in line.
@@ -289,19 +289,6 @@ Outbound system event from the agent or bot to a customer.
 }
 ```
 
-### outbound agent_done
-
-Outbound event sent when the customer closes the session.
-
-```json
-{
-  "type": "agent_done",
-  "direction": "outbound",
-  "platformId": "comhem-web",
-  "userId": "8a8b5c18-c0dd-467b-bd77-7e7685fadf6d"
-}
-```
-
 ### outbound typing_on
 
 Outbound event sent when the agent started typing a message.
@@ -409,5 +396,18 @@ Internal event when bot or agent system have identified the customer.
   "userId": "8a8b5c18-c0dd-467b-bd77-7e7685fadf6d",
   "brandId": "comhem",
   "customerId": "1234567"
+}
+```
+
+### agent_done
+
+Internal event sent when the agent closes the session.
+
+```json
+{
+  "type": "agent_done",
+  "direction": "internal",
+  "platformId": "comhem-web",
+  "userId": "8a8b5c18-c0dd-467b-bd77-7e7685fadf6d"
 }
 ```
