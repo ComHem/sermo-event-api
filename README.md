@@ -37,7 +37,6 @@ Following are example scenarios that are quite different to give a broad underst
 
 1. The bot identifies customer intent and who the customer is.
 1. The bot handover the session by sending an internal [`handover_to_agent`](#handover_to_agent) event and the session is added to the queue.
-1. When the session is first in line and the agent application suspects that the customer has left the agent application is handing over the session to the bot by using the [`handover_to_bot`](#handover_to_bot) event.
 1. The bot makes sure that the customer is still there and then handing the session back to the agent application by sending a [`handover_to_agent`](#handover_to_agent) event.
 1. The agent application assigns the session to an agent as it would be first in line.
 
@@ -45,7 +44,6 @@ Following are example scenarios that are quite different to give a broad underst
 
 1. A customer wants help with an invoice.
 1. After agent has helped the customer the agent hands over the session to the bot to end the session in the name of the agent. The agent selects this option by clicking on a button dedicated for this purpose.
-1. The agent application hands over the session by sending the [`handover_to_bot`](#handover_to_bot) event with `flowGroupId: 'end'`.
 1. The bot asks if the customer would like help with somethings and the customer have an additional question regarding the invoice.
 1. So the bot hands the session back to the agent sending the [`handover_to_agent`](#handover_to_agent) event. The session pops back up for the same agent. The customer never noticed that he left the agent for a short while.
 
@@ -342,20 +340,6 @@ Internal event used when a session needs to be handed over from bot to agent.
   "direction": "internal",
   "platformId": "comhem-web",
   "userId": "8a8b5c18-c0dd-467b-bd77-7e7685fadf6d"
-}
-```
-
-### handover_to_bot
-
-Internal event used when a session needs to be handed over from agent to bot.
-
-```json
-{
-  "type": "handover_to_bot",
-  "direction": "internal",
-  "platformId": "comhem-web",
-  "userId": "8a8b5c18-c0dd-467b-bd77-7e7685fadf6d",
-  "flowGroupId": "end"
 }
 ```
 
