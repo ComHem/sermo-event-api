@@ -26,8 +26,7 @@ This event is sent to assign a model to a web session.
 This event is sent when algorithms trigger to offer an assistance. The attribute ``assistanceOffered`` is ``true`` if 
 an offer to the user was done and ``false`` if the session was picked for assistance but it was not possible due to
 other reasons like no agents available. This enables us to compute the potential of a model even if we have 
-temporary restrictions like no available agents. Since there can be more than one assistance per web session,  
-``assistanceId`` is used to add more events to a particular assistance later on.
+temporary restrictions like no available agents. Since there can be more than one assistance per web session,  ``assistanceId`` is used to add more events to a particular assistance later on.
 ```json
 {
   "type": "assistance_triggered",
