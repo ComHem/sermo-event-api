@@ -8,7 +8,7 @@ The purpose of this test cycle is to be able to compare different models over ti
 
 The API is based on events. Following are common attributes for all events.
 - ``type`` is the type of event occurred
-- ``userTrackingId`` is a unique id for the web session. If possible it should be the GA id
+- ``userTrackingId`` is a unique id for the user over time. If possible it should be the GA id
 - ``testId`` is the test id for current test running
 - ``at`` is the time when the event occurred     
 
