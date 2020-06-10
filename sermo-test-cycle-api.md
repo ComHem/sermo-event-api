@@ -9,6 +9,7 @@ The purpose of this test cycle is to be able to compare different models over ti
 The API is based on events. Following are common attributes for all events.
 - ``type`` is the type of event occurred
 - ``userTrackingId`` is a unique id for the web session. If possible it should be the GA id
+- ``testId`` is the test id for current test running
 - ``at`` is the time when the event occurred     
 
 ### model_assigned event
@@ -17,6 +18,7 @@ This event is sent to assign a model to a web session.
 {
   "type": "model_assigned",
   "userTrackingId": "GA1.2.1500669880.1586985368",
+  "testId": "first_test",
   "at": "2020-02-18T14:41:37.571Z",
   "modelId": "reference_v16"
 }
@@ -31,6 +33,7 @@ temporary restrictions like no available agents. Since there can be more than on
 {
   "type": "assistance_triggered",
   "userTrackingId": "GA1.2.1500669880.1586985368",
+  "testId": "first_test",  
   "at": "2020-02-18T14:41:37.571Z",
   "assistanceId": "1234567",
   "assistanceOffered": true
@@ -43,6 +46,7 @@ This event is sent when user is accepting assistance.
 {
   "type": "offer_accepted",
   "userTrackingId": "GA1.2.1500669880.1586985368",  
+  "testId": "first_test",  
   "at": "2020-02-18T14:41:37.571Z",
   "assistanceId": "1234567",
   "userSelectionId": "chat"
@@ -55,6 +59,7 @@ This event is sent when the agent started to assist the user.
 {
   "type": "assistance_started",
   "userTrackingId": "GA1.2.1500669880.1586985368",
+  "testId": "first_test",  
   "at": "2020-02-18T14:41:37.571Z",
   "assistanceId": "1234567"
 }
@@ -66,6 +71,7 @@ This event is sent when the agent started to assist the user.
 {
   "type": "outcome",
   "userTrackingId": "GA1.2.1500669880.1586985368",  
+  "testId": "first_test",  
   "at": "2020-02-18T14:41:37.571Z",
   "assistanceId": "1234567",
   "outcomeId": "sales_2"
