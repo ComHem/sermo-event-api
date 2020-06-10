@@ -26,12 +26,14 @@ This event is sent to assign a model to a web session.
 This event is sent when algorithms trigger to offer an assistance. The attribute ``assistanceOffered`` is ``true`` if 
 an offer to the user was done and ``false`` if the session was picked for assistance but it was not possible due to
 other reasons like no agents available. This enables us to compute the potential of a model even if we have 
-temporary restrictions like no available agents. 
+temporary restrictions like no available agents. Since there can be more than one assistance per web session,  
+``assistanceId`` is used to add more events to a particular assistance later on.
 ```json
 {
   "type": "assistance_triggered",
   "userTrackingId": "GA1.2.1500669880.1586985368",
   "at": "2020-02-18T14:41:37.571Z",
+  "assistanceId": "1234567",
   "assistanceOffered": true
 }
 ```
@@ -43,6 +45,7 @@ This event is sent when user is accepting assistance.
   "type": "offer_accepted",
   "userTrackingId": "GA1.2.1500669880.1586985368",  
   "at": "2020-02-18T14:41:37.571Z",
+  "assistanceId": "1234567",
   "userSelectionId": "chat"
 }
 ```
@@ -53,7 +56,8 @@ This event is sent when the agent started to assist the user.
 {
   "type": "assistance_started",
   "userTrackingId": "GA1.2.1500669880.1586985368",
-  "at": "2020-02-18T14:41:37.571Z"
+  "at": "2020-02-18T14:41:37.571Z",
+  "assistanceId": "1234567"
 }
 ```
 
@@ -64,6 +68,7 @@ This event is sent when the agent started to assist the user.
   "type": "outcome",
   "userTrackingId": "GA1.2.1500669880.1586985368",  
   "at": "2020-02-18T14:41:37.571Z",
+  "assistanceId": "1234567",
   "outcomeId": "sales_2"
 }
 ```
