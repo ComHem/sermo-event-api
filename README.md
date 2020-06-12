@@ -326,6 +326,20 @@ Is sent by the agent application when a platform is closed to customer enabling 
 }
 ```
 
+### outbound end_session
+
+Is sent by the agent application when a chat session has ended. The customer is then forced to initialize a _new_ session to continue writing. `reasonText` is an optional string that will be presented to the customer.
+
+```json
+{
+  "type": "end_session",
+  "direction": "outbound",
+  "platformId": "comhem-web",
+  "userId": "8a8b5c18-c0dd-467b-bd77-7e7685fadf6d",
+  "reasonText": "Agenten har lämnat chatten"
+}
+```
+
 ## Internal events
 
 Internal events are events sent between internal broker clients, that is not sent to customer clients.
