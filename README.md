@@ -31,7 +31,7 @@ Following are example scenarios that are quite different to give a broad underst
 1. The agent application sends the outbound [`queue_number`](#outbound-queue_number) event to show the customer current queue number.
 1. When the agent starts typing in the agent GUI an outbound [`typing_on`](#outbound-typing_on) event is sent and when the agent stops typing an outbound [`typing_off`](#outbound-typing_off) is sent.
 1. When the agent wants to suspend the session an internal [`agent_done`](#agent_done) event is sent.
-1. When the agent wants to end the session an outbound [`end_session`] event is sent.
+1. When the agent wants to end the session an outbound [`end_session`](#outbound-end_session) event is sent.
 1. When the customer closes the chat window an inbound [`client_left`](#inbound-client_left) event is sent.
 
 ### The bot asks if the customer is still there
