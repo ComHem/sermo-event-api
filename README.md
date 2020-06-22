@@ -8,11 +8,37 @@ Events sent to the broker will be sent to all other clients. This will enable cl
 
 # Broker Events
 
-Three are three different queues used to send events.
+All events are using the following attributes:
 
-- Inbound - for events sent from customer clients to the bot or agents.
-- Outbound - for events sent from bot and agent to customer clients.
-- Internal - for events sent between components except customer clients, like from bot to agent applications.
+- `direction` specifies where the event is routed to. There are three different directions.
+  - `inbound` - sent from customer and routed to bot and agent applications.
+  - `outbound` - sent from bot or agent applications to all applications, including customer.
+  - `internal` - sent from and to all applications _except_ for customer applications.
+- `type` sets which type of event it is, e.i. text, typing, heartbeat, handover, etc.
+- `platformId` is a unique id for the channel in which the customer has contacted us, e.i. comhem.se contact page, comhem.se assited sales or boxer.se contact page.
+- `userId` is an unique id for the customers/users. For the web a new unique id is generated for every new visit while for Messenger the user id connected to the facebook account will be used which is persistent over time.
+
+The events are all listed below and described in more detail in following sections:
+
+- [`inbound/text`](#inbound-text)
+- [`inbound/heartbeat`](#inbound-heartbeat)
+- [`inbound/messages_read`](#inbound-messages_read)
+- [`inbound/client_left`](#inbound-client_left)
+- [`inbound/client_unload`](#inbound-client_unload)
+- [`inbound/typing_on`](#inbound-typing_on)
+- [`inbound/assisted_sales_identifier`](#inbound-assisted_sales_identifier)
+- [`outbound/queue_number`](#outbound-queue_number)
+- [`outbound/text`](#outbound-text)
+- [`outbound/info`](#outbound-info)
+- [`outbound/typing_on`](#outbound-typing_on)
+- [`outbound/typing_off`](#outbound-typing_off)
+- [`outbound/platform_closed`](#outbound-platform_closed)
+- [`outbound/end_session`](#outbound-end_session)
+- [`internal/handover_to_agent`](#internal-handover_to_agent)
+- [`internal/handover_to_queue`](#internal-handover_to_queue)
+- [`internal/claim_session`](#internal-claim_session)
+- [`internal/customer_identified`](#internal-customer_identified)
+- [`internal/agent_done`](#internal-agent_done)
 
 ## Example Scenarios
 
@@ -24,21 +50,21 @@ Following are example scenarios that are quite different to give a broad underst
 1. When the customer is typing a message the inbound [`typing`](#inbound-typing) event is sent continuously enabling the agent application to show what the customer is typing before the message is sent.
 1. When the customer sends the first message an inbound [`text`](#inbound-text) event is sent.
 1. The bot waits until the customer has not typed for at least 3 seconds before answering by sending an outbound [`text`](#outbound-text-from-bot) event.
-1. The bot identifies customer intent and who the customer is after which a [`identified_customer`](#customer_identified) event is sent out.
-1. The bot hands over to the agent application by sending the internal [`handover_to_agent`](#handover_to_agent) event.
+1. The bot identifies customer intent and who the customer is after which a [`identified_customer`](#internal-customer_identified) event is sent out.
+1. The bot hands over to the agent application by sending the internal [`handover_to_agent`](#internal-handover_to_agent) event.
 1. The agent application has been listening on all events above enabling for the future agent to see the previous dialog.
 1. The agent application sends the outbound [`info`](#outbound-info) event telling the customer that the session has been placed in queue.
 1. The agent application sends the outbound [`queue_number`](#outbound-queue_number) event to show the customer current queue number.
 1. When the agent starts typing in the agent GUI an outbound [`typing_on`](#outbound-typing_on) event is sent and when the agent stops typing an outbound [`typing_off`](#outbound-typing_off) is sent.
-1. When the agent wants to suspend the session an internal [`agent_done`](#agent_done) event is sent.
+1. When the agent wants to suspend the session an internal [`agent_done`](#internal-agent_done) event is sent.
 1. When the agent wants to end the session an outbound [`end_session`](#outbound-end_session) event is sent.
 1. When the customer closes the chat window an inbound [`client_left`](#inbound-client_left) event is sent.
 
 ### The bot asks if the customer is still there
 
 1. The bot identifies customer intent and who the customer is.
-1. The bot handover the session by sending an internal [`handover_to_agent`](#handover_to_agent) event and the session is added to the queue.
-1. The bot makes sure that the customer is still there and then handing the session back to the agent application by sending a [`handover_to_agent`](#handover_to_agent) event.
+1. The bot handover the session by sending an internal [`handover_to_agent`](#internal-handover_to_agent) event and the session is added to the queue.
+1. The bot makes sure that the customer is still there and then handing the session back to the agent application by sending a [`handover_to_agent`](#internal-handover_to_agent) event.
 1. The agent application assigns the session to an agent as it would be first in line.
 
 ### The bot ends a session for the agent
@@ -46,11 +72,11 @@ Following are example scenarios that are quite different to give a broad underst
 1. A customer wants help with an invoice.
 1. After agent has helped the customer the agent hands over the session to the bot to end the session in the name of the agent. The agent selects this option by clicking on a button dedicated for this purpose.
 1. The bot asks if the customer would like help with somethings and the customer have an additional question regarding the invoice.
-1. So the bot hands the session back to the agent sending the [`handover_to_agent`](#handover_to_agent) event. The session pops back up for the same agent. The customer never noticed that he left the agent for a short while.
+1. So the bot hands the session back to the agent sending the [`handover_to_agent`](#internal-handover_to_agent) event. The session pops back up for the same agent. The customer never noticed that he left the agent for a short while.
 
 ### Customer returns after agent closed session
 
-1. After the agent has helped the customer the agent clicks down the session and an internal [`agent_done`](#agent_done) event is sent out.
+1. After the agent has helped the customer the agent clicks down the session and an internal [`agent_done`](#internal-agent_done) event is sent out.
 1. The customer receives a message that the agent has left the session and if the customer want to get in contact again, it is only to send a new message.
 1. The customer sends a new message generating an inbound [`text`](#inbound-text) event.
 1. The customer is put into the queue first in line.
@@ -65,8 +91,8 @@ Following are example scenarios that are quite different to give a broad underst
 
 1. An assisted sales session is started in Sermo but the agent realizes that the customer want support help, not sales help.
 1. LiveChat has been listening on all events above enabling for the future agent in LiveChat to see the previous dialog.
-1. Agent in Sermo clicks on a transfer-to-queue drop down in Sermo and selects Comviq Teknisk Support. A [`handover_to_queue`](#handover_to_queue) event is sent with comviq_support as a target queue.
-1. When livechat sees the hand over event, livechat claims the session by sending a [`claim_session`](#claim_session) event so Sermo knows that the session is being handled.
+1. Agent in Sermo clicks on a transfer-to-queue drop down in Sermo and selects Comviq Teknisk Support. A [`handover_to_queue`](#internal-handover_to_queue) event is sent with comviq_support as a target queue.
+1. When livechat sees the hand over event, livechat claims the session by sending a [`claim_session`](#internal-claim_session) event so Sermo knows that the session is being handled.
 1. LiveChat is now in possesion of the session in question and deals with it as seen fit.
 
 ## Common event attributes
@@ -345,7 +371,7 @@ Is sent by the agent application when a chat session has ended. The customer is 
 
 Internal events are events sent between internal broker clients, that is not sent to customer clients.
 
-### handover_to_agent
+### internal handover_to_agent
 
 Internal event used when a session needs to be handed over from bot to agent.
 
@@ -358,7 +384,7 @@ Internal event used when a session needs to be handed over from bot to agent.
 }
 ```
 
-### handover_to_queue 
+### internal handover_to_queue 
 
 Internal event used when a session needs to be transfered from one queue to another.
 
@@ -372,7 +398,7 @@ Internal event used when a session needs to be transfered from one queue to anot
 }
 ```
 
-### claim_session
+### internal claim_session
 ```json
 {
   "type": "claim_session",
@@ -383,7 +409,7 @@ Internal event used when a session needs to be transfered from one queue to anot
 }
 ```
 
-### customer_identified
+### internal customer_identified
 
 Internal event when bot or agent system have identified the customer.
 
@@ -398,7 +424,7 @@ Internal event when bot or agent system have identified the customer.
 }
 ```
 
-### agent_done
+### internal agent_done
 
 Internal event sent when the agent closes the session.
 
