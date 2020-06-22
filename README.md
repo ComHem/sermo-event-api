@@ -39,6 +39,16 @@ The events are all listed below and described in more detail in following sectio
 - [`internal/claim_session`](#internal-claim_session)
 - [`internal/customer_identified`](#internal-customer_identified)
 - [`internal/agent_done`](#internal-agent_done)
+- [`internal/application_heartbeat`](#internal-application_heartbeat)
+
+# Connecting to test environment
+
+Sermo exposes a [socket.IO](https://socket.io/) server. Use the appropriate docs for your platform https://socket.io/docs/.
+
+## Troubleshooting
+
+If you are testing the connection using your browser, please make sure that you have accepted the certificate on the test environment. Visit the health endpoint in your browser: https://sermo-api-ci1.sermo.dev-dockeree.int.comhem.com/health
+
 
 ## Example Scenarios
 
@@ -434,5 +444,21 @@ Internal event sent when the agent closes the session.
   "direction": "internal",
   "platformId": "comhem-web",
   "userId": "8a8b5c18-c0dd-467b-bd77-7e7685fadf6d"
+}
+```
+
+### internal application_heartbeat
+
+Internal event sent to notify sermo that the specified application is alive and ready.
+
+- `available` specifies whether or not the application is currently available to receive chat sessions. I.e., set to `false` outside of chat opening hours.
+
+Example payload:
+
+```json
+{
+  "type": "application_heartbeat",
+  "direction": "internal",
+  "available": true
 }
 ```
