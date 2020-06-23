@@ -449,7 +449,7 @@ Internal event sent when the agent closes the session.
 
 ### internal application_heartbeat
 
-Internal event sent to notify sermo that the specified application is alive and ready.
+Internal event sent to notify sermo that the specified application is alive and ready. This event should be sent periodically with a period of 30s (unless otherwise agreed).
 
 - `available` specifies whether or not the application is currently available to receive chat sessions. I.e., set to `false` outside of chat opening hours.
 
