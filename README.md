@@ -142,9 +142,11 @@ Inbound image from the customer with an appended text.
   "platformId": "comhem-web",
   "userId": "8a8b5c18-c0dd-467b-bd77-7e7685fadf6d",
   "text": "Bifogad bild:",
-  "image": "data:image/jpeg;base64,/9j/4AAQSkZJRgAB+UinhpBuBqJlnCSSdoePgIDo//2Q=="
+  "image": "some-image-id"
 }
 ```
+
+The image can be retreived from http://sermo-api.comhem.com/image/IMAGE_ID
 
 ### inbound heartbeat
 
@@ -306,9 +308,11 @@ Outbound image sent from the agent to the customer.
   "platformId": "comhem-web",
   "userId": "8a8b5c18-c0dd-467b-bd77-7e7685fadf6d",
   "text": "Bifogad bild:",
-  "image": "data:image/jpeg;base64,/9j/4AAQSkZJRgAB+UinhpBuBqJlnCSSdoePgIDo//2Q=="
+  "image": "some-image-id"
 }
 ```
+
+The image can be retreived from http://sermo-api.comhem.com/image/IMAGE_ID
 
 ### outbound info 
 
