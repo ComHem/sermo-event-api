@@ -131,7 +131,7 @@ Inbound messages from the customer.
 }
 ```
 
-### inbound text with image
+### inbound text with imageId
 
 Inbound image from the customer with an appended text.
 
@@ -142,7 +142,7 @@ Inbound image from the customer with an appended text.
   "platformId": "comhem-web",
   "userId": "8a8b5c18-c0dd-467b-bd77-7e7685fadf6d",
   "text": "Bifogad bild:",
-  "image": "some-image-id"
+  "imageId": "some-image-id"
 }
 ```
 
@@ -297,7 +297,7 @@ Outbound text sent from the bot to the customer. The client will simulate the ty
 }
 ```
 
-### outbound text with image
+### outbound text with imageId
 
 Outbound image sent from the agent to the customer.
 
@@ -308,7 +308,7 @@ Outbound image sent from the agent to the customer.
   "platformId": "comhem-web",
   "userId": "8a8b5c18-c0dd-467b-bd77-7e7685fadf6d",
   "text": "Bifogad bild:",
-  "image": "some-image-id"
+  "imageId": "some-image-id"
 }
 ```
 
@@ -466,3 +466,22 @@ Example payload:
   "available": true
 }
 ```
+
+# Broker endpoint
+
+# POST /images
+
+To upload images from the agent.
+
+```json
+{
+  "image": "b64-image-content"
+}
+```
+
+This endpoint responds with the location of the image within it's location header.
+The id of the image is the last part of that url and that is the id that should be passed with the corresponding text event.
+
+# GET /images/IMAGE_ID
+
+Used to get images uploaded either by clients or agents.
