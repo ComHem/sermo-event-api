@@ -146,7 +146,7 @@ Inbound image from the customer with an appended text.
 }
 ```
 
-The image can be retreived from http://sermo-api.comhem.com/image/IMAGE_ID
+The image can be retreived from http://sermo-api.comhem.com/images/IMAGE_ID
 
 ### inbound heartbeat
 
@@ -312,7 +312,7 @@ Outbound image sent from the agent to the customer.
 }
 ```
 
-The image can be retreived from http://sermo-api.comhem.com/image/IMAGE_ID
+The image can be retreived from http://sermo-api.comhem.com/images/IMAGE_ID
 
 ### outbound info 
 
