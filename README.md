@@ -469,7 +469,7 @@ Example payload:
 
 # Broker endpoint
 
-# POST /images
+# POST /images?apiKey=SOME_API_KEY
 
 To upload images from the agent.
 
@@ -481,6 +481,8 @@ To upload images from the agent.
 
 This endpoint responds with the location of the image within it's location header.
 The id of the image is the last part of that url and that is the id that should be passed with the corresponding text event.
+
+An api-key needs to be supplied as a query parameter.
 
 # GET /images/IMAGE_ID
 
