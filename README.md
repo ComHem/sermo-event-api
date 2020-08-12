@@ -41,9 +41,35 @@ The events are all listed below and described in more detail in following sectio
 - [`internal/agent_done`](#internal-agent_done)
 - [`internal/application_heartbeat`](#internal-application_heartbeat)
 
-# Connecting to test environment
+# Connecting to the event API
 
 Sermo exposes a [socket.IO](https://socket.io/) server. Use the appropriate docs for your platform https://socket.io/docs/.
+
+An API-key is required to connect. Contact the sermo team at ch-sermo@tele2.com.
+
+| env  | host |
+| -    | -    |
+| dev  | sermo-api-ci1.sermo.dev-dockeree.int.comhem.com |
+| prod | sermo-api.comhem.com |
+
+
+The api-key is passed as a query-parameter to the socket.io endpoint. For example, using node and the socket.io-client package:
+
+```js
+const io = require('socket.io-client');
+const socket = io('https://<sermo-api-host>?apiKey=<your-api-key>', {
+  path: '/socket.io'
+});
+
+// Send
+socket.send({ direction: 'outbound', type: 'text', ... })
+
+// Receive
+socket.on('message', ev => {
+  console.log(ev);
+  // -> { direction: 'outbound', type: 'text', ... }
+});
+```
 
 ## Troubleshooting
 
