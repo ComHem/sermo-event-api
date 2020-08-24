@@ -34,7 +34,7 @@ The common parts for all events are:
   "receiver": "sermo",
   "event": "...",
   "customerId": "12345678",
-  "maxZIndex": 1501
+  "zIndex": 1501
   ...
 }
 ```
@@ -43,7 +43,7 @@ Where the `WEBSITE_BRAND` string should be the brand of the website.
 
 The value of `customerId` should be provided if the customer is logged in on the site. Doing so enables the bot to not ask for it and only request the intent of the customer. This is an optional field.
 
-The value for `maxZIndex` is used so that we can make sure that the CSS `z-index` we open the iFrame with is the highest on the page.
+The value for `zIndex` is used so that we can make sure that the CSS `z-index` we open the iFrame with is the highest on the page. If is this value is not provided it will be defaulted to 10000
 
 ### How to start a support chat
 
@@ -53,7 +53,7 @@ The value for `maxZIndex` is used so that we can make sure that the CSS `z-index
   "receiver": "sermo",
   "event": "START_SUPPORT_CHAT",
   "customerId": "12345678",
-  "maxZIndex": 1501
+  "zIndex": 1501
 }
 ```
 
@@ -67,7 +67,7 @@ The value for `maxZIndex` is used so that we can make sure that the CSS `z-index
   "customerId": "12345678",
   "niSalesLeadId": "lead-123",
   "niSessionId": "session-123",
-  "maxZIndex": 1501
+  "zIndex": 1501
 }
 ```
 
@@ -83,7 +83,7 @@ The value for `niSessionId` should be the ID of the session that NowInteract pro
   "receiver": "sermo",
   "event": "START_SAVE_CHAT",
   "customerId": "12345678",
-  "maxZIndex": 1501
+  "zIndex": 1501
 }
 ```
 
@@ -190,6 +190,25 @@ Send a message through `window.postMessage` with a payload of this format:
   "sender": "WEBSITE_BRAND",
   "receiver": "sermo",
   "event": "ORDER_PLACED",
+  "customerId": "12345678",
+  "ssn": "190001011234",
+  "purchaseId": "499d2848150",
+  "products": [
+    {
+      "id": "BBG062",
+      "name": "Bredband 300",
+      "category": "Broadband - Base subscription - New customer",
+      "price": 5988,
+      "quantity": 1
+    },
+    {
+      "id": "3101",
+      "name": "Wi-Fi Hub",
+      "category": "Broadband - Equipment - New customer",
+      "price": 0,
+      "quantity": 1
+    }
+  ]
 }
 ```
 
