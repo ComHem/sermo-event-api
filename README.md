@@ -143,12 +143,11 @@ Following are example scenarios that are quite different to give a broad underst
 Following attributes are used for almost all events.
 
 - `type` sets which type of event it is, e.i. text, typing, heartbeat, handover, etc.
-- `platformId` is a unique id for the channel in which the customer has contacted us, e.i. comhem.se contact page, comhem.se assited sales or boxer.se contact page.
 - `userId` is an unique id for the customers/users. For the web a new unique id is generated for every new visit while for Messenger the user id connected to the facebook account will be used which is persistent over time.
 
 ## Inbound
 
-Inbound events are events sent from customer to the bot or the agent application.
+Inbound events are events sent from customer to the bot or the agent application. In addition to the common event attributes, all inbound attributes specify a `platformId` which is a unique id for the channel in which the customer has contacted us, e.i. comhem.se contact page, comhem.se assited sales or boxer.se contact page.
 
 ### inbound text
 
@@ -280,7 +279,6 @@ Is sent when the customer is in the queue enabling the customer client to displa
 {
   "type": "queue_number",
   "direction": "outbound",
-  "platformId": "comhem-web",
   "userId": "8a8b5c18-c0dd-467b-bd77-7e7685fadf6d",
   "queueNumber": 1
 }
@@ -296,7 +294,6 @@ The avatarId and avatarUrl property of the agent is optional. If none of these t
 {
   "type": "text",
   "direction": "outbound",
-  "platformId": "comhem-web",
   "userId": "8a8b5c18-c0dd-467b-bd77-7e7685fadf6d",
   "text": "Jag skickar ett SMS till dig nu med betalningsuppgifterna, det kommer plinga i din telefonen inom en minut.",
   "agent": {
@@ -317,7 +314,6 @@ Outbound text sent from the bot to the customer. The client will simulate the ty
 {
   "type": "text",
   "direction": "outbound",
-  "platformId": "comhem-web",
   "userId": "8a8b5c18-c0dd-467b-bd77-7e7685fadf6d",
   "text": "Hej!",
   "typing": 1000,
@@ -338,7 +334,6 @@ Outbound image sent from the agent to the customer.
 {
   "type": "text",
   "direction": "outbound",
-  "platformId": "comhem-web",
   "userId": "8a8b5c18-c0dd-467b-bd77-7e7685fadf6d",
   "text": "Bifogad bild:",
   "imageId": "some-image-id"
@@ -355,7 +350,6 @@ Outbound system event from the agent or bot to a customer.
 {
   "type": "info",
   "direction": "outbound",
-  "platformId": "comhem-web",
   "userId": "8a8b5c18-c0dd-467b-bd77-7e7685fadf6d",
   "text": "Chatten har placerats i kön \"Com Hem allmänt\""
 }
@@ -369,7 +363,6 @@ Outbound event sent when the agent started typing a message.
 {
   "type": "typing_on",
   "direction": "outbound",
-  "platformId": "comhem-web",
   "userId": "8a8b5c18-c0dd-467b-bd77-7e7685fadf6d"
 }
 ```
@@ -382,7 +375,6 @@ Outbound event sent when the agent stopped typing a message.
 {
   "type": "typing_off",
   "direction": "outbound",
-  "platformId": "comhem-web",
   "userId": "8a8b5c18-c0dd-467b-bd77-7e7685fadf6d"
 }
 ```
@@ -395,7 +387,6 @@ Is sent by the agent application when a platform is closed to customer enabling 
 {
   "type": "platform_closed",
   "direction": "outbound",
-  "platformId": "comhem-web",
   "userId": "8a8b5c18-c0dd-467b-bd77-7e7685fadf6d"
 }
 ```
@@ -408,7 +399,6 @@ Is sent by the agent application when a chat session has ended. The customer is 
 {
   "type": "end_session",
   "direction": "outbound",
-  "platformId": "comhem-web",
   "userId": "8a8b5c18-c0dd-467b-bd77-7e7685fadf6d",
   "reasonText": "Agenten har lämnat chatten"
 }
@@ -426,7 +416,6 @@ Internal event used when a session needs to be handed over from bot to agent.
 {
   "type": "handover_to_agent",
   "direction": "internal",
-  "platformId": "comhem-web",
   "userId": "8a8b5c18-c0dd-467b-bd77-7e7685fadf6d"
 }
 ```
@@ -439,7 +428,6 @@ Internal event used when a session needs to be transfered from one queue to anot
 {
   "type": "handover_to_queue",
   "direction": "internal",
-  "platformId": "comhem-web",
   "queueId": "comviq_support",
   "userId": "8a8b5c18-c0dd-467b-bd77-7e7685fadf6d",
 }
@@ -450,7 +438,6 @@ Internal event used when a session needs to be transfered from one queue to anot
 {
   "type": "claim_session",
   "direction": "internal",
-  "platformId": "comhem-web",
   "userId": "8a8b5c18-c0dd-467b-bd77-7e7685fadf6d",
   "agentId": "some-agent"
 }
@@ -464,7 +451,6 @@ Internal event when bot or agent system have identified the customer.
 {
   "type": "customer_identified",
   "direction": "internal",
-  "platformId": "comhem-web",
   "userId": "8a8b5c18-c0dd-467b-bd77-7e7685fadf6d",
   "brandId": "comhem",
   "customerId": "1234567"
@@ -479,7 +465,6 @@ Internal event sent when the agent closes the session.
 {
   "type": "agent_done",
   "direction": "internal",
-  "platformId": "comhem-web",
   "userId": "8a8b5c18-c0dd-467b-bd77-7e7685fadf6d"
 }
 ```
