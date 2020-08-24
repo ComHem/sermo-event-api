@@ -183,6 +183,8 @@ Send a message through `window.postMessage` with a payload of this format:
 
 #### The customer places an order
 
+This event is specific for the comhem brand. Not usable on other brands.
+
 Send a message through `window.postMessage` with a payload of this format:
 
 ```json
