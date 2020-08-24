@@ -75,7 +75,7 @@ The value for `niSalesLeadId` should be the ID of the lead that NowInteract prov
 
 The value for `niSessionId` should be the ID of the session that NowInteract provides to the website.
 
-### How to start a support chat
+### How to start a save chat
 
 ```json
 {
