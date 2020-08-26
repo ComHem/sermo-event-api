@@ -15,7 +15,6 @@ All events are using the following attributes:
   - `outbound` - sent from bot or agent applications to all applications, including customer.
   - `internal` - sent from and to all applications _except_ for customer applications.
 - `type` sets which type of event it is, e.i. text, typing, heartbeat, handover, etc.
-- `platformId` is a unique id for the channel in which the customer has contacted us, e.i. comhem.se contact page, comhem.se assited sales or boxer.se contact page.
 - `userId` is an unique id for the customers/users. For the web a new unique id is generated for every new visit while for Messenger the user id connected to the facebook account will be used which is persistent over time.
 
 The events are all listed below and described in more detail in following sections:
@@ -147,7 +146,7 @@ Following attributes are used for almost all events.
 
 ## Inbound
 
-Inbound events are events sent from customer to the bot or the agent application. In addition to the common event attributes, all inbound attributes specify a `platformId` which is a unique id for the channel in which the customer has contacted us, e.i. comhem.se contact page, comhem.se assited sales or boxer.se contact page.
+Inbound events are events sent from customer to the bot or the agent application.
 
 ### inbound text
 
@@ -157,7 +156,6 @@ Inbound messages from the customer.
 {
   "type": "text",
   "direction": "inbound",
-  "platformId": "comhem-web",
   "userId": "8a8b5c18-c0dd-467b-bd77-7e7685fadf6d",
   "text": "Jag vill ändra faktura 70557076"
 }
@@ -171,7 +169,6 @@ Inbound image from the customer with an appended text.
 {
   "type": "text",
   "direction": "inbound",
-  "platformId": "comhem-web",
   "userId": "8a8b5c18-c0dd-467b-bd77-7e7685fadf6d",
   "text": "Bifogad bild:",
   "imageId": "some-image-id"
@@ -188,7 +185,6 @@ Inbound heartbeat is sent from the customer client so that the system can track 
 {
   "type": "heartbeat",
   "direction": "inbound",
-  "platformId": "comhem-web",
   "userId": "8a8b5c18-c0dd-467b-bd77-7e7685fadf6d"
 }
 ```
@@ -201,7 +197,6 @@ An inbound event with a timestamp on when the message was red by the customer.
 {
   "type": "messages_read",
   "direction": "inbound",
-  "platformId": "comhem-web",
   "userId": "8a8b5c18-c0dd-467b-bd77-7e7685fadf6d",
   "text": "read",
   "at": "2020-02-18T12:14:11.386Z"
@@ -216,7 +211,6 @@ The customer has clicked down the chat window to close the chat.
 {
   "type": "client_left",
   "direction": "inbound",
-  "platformId": "comhem-web",
   "userId": "8a8b5c18-c0dd-467b-bd77-7e7685fadf6d",
   "text": "Kunden har stängt chatten.",
   "at": "2020-02-18T12:12:33.766Z"
@@ -231,7 +225,6 @@ The customer has closed the browser, the tab, or refreshed to page. Using https:
 {
   "type": "client_unload",
   "direction": "inbound",
-  "platformId": "comhem-web",
   "userId": "8a8b5c18-c0dd-467b-bd77-7e7685fadf6d",
   "at": "2020-02-18T12:10:18.968Z"
 }
@@ -245,7 +238,6 @@ The inbound typing event is sent continuously when the customer is typing. This 
 {
   "type": "typing_on",
   "direction": "inbound",
-  "platformId": "comhem-web",
   "userId": "8a8b5c18-c0dd-467b-bd77-7e7685fadf6d",
   "text": "Hej, jag mitt na",
   "at": "2020-02-18T14:41:37.571Z"
@@ -260,7 +252,6 @@ Assisted sales identifier event with sales lead id and session id.
 {
   "type": "assisted_sales_identifier",
   "direction": "inbound",
-  "platformId": "comhem-web",
   "userId": "89462d14-f96c-4cc1-85b2-9fa8ad8eb961",
   "niSalesLeadId": "123-abc",
   "niSessionId": "456-def"
