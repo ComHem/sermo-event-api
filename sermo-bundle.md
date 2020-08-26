@@ -9,7 +9,7 @@ Include a script that with any of these scripts within the head block of your si
 
 | env  | host |
 | -    | -    |
-| dev  | https://sermo-webchat-ci1.sermo.dev-dockeree.int.comhem.com/bundle/sermo.min.js |
+| dev  | https://sermo-webchat-ci1.sermo.dev-dockeree.int.comhem.com/bundle/sermo.ci1.js |
 | prod | https://sermo.comhem.com/bundle/sermo.min.js |
 
 All interactions with the sermo bundle is done through window.postMessage. The sender of each message should be the brand of the site that is sending the message.
@@ -39,7 +39,7 @@ The common parts for all events are:
 }
 ```
 
-Where the `WEBSITE_BRAND` string should be the brand of the website. 
+Where the `WEBSITE_BRAND` string should be the brand of the website.
 
 The value of `customerId` should be provided if the customer is logged in on the site. Doing so enables the bot to not ask for it and only request the intent of the customer. This is an optional field.
 
@@ -156,7 +156,7 @@ In addition to the event to start a chat the Sermo bundle will listen for more e
 Customer identification and order placement will be used to connect chat sessions to what the customer does on the website during the chat session and after.
 
 
-#### The user logs in 
+#### The user logs in
 
 Send a message through `window.postMessage` with a payload of this format:
 
@@ -169,7 +169,7 @@ Send a message through `window.postMessage` with a payload of this format:
 }
 ```
 
-#### The user logs out 
+#### The user logs out
 
 Send a message through `window.postMessage` with a payload of this format:
 
