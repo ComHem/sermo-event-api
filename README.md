@@ -86,7 +86,7 @@ Following are example scenarios that are quite different to give a broad underst
 1. When the customer sends the first message an inbound [`text`](#inbound-text) event is sent.
 1. The bot waits until the customer has not typed for at least 3 seconds before answering by sending an outbound [`text`](#outbound-text-from-bot) event.
 1. The bot identifies customer intent and who the customer is after which a [`identified_customer`](#internal-customer_identified) event is sent out.
-1. The bot hands over to the agent application by sending the internal [`handover_to_agent`](#internal-handover_to_agent) event.
+1. The bot hands over to the agent application by sending the internal [`handover_to_queue`](#internal-handover_to_queue) event with the corresponding queue.
 1. The agent application has been listening on all events above enabling for the future agent to see the previous dialog.
 1. The agent application sends the outbound [`info`](#outbound-info) event telling the customer that the session has been placed in queue.
 1. The agent application sends the outbound [`queue_number`](#outbound-queue_number) event to show the customer current queue number.
