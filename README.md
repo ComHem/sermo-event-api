@@ -90,6 +90,7 @@ Following are example scenarios that are quite different to give a broad underst
 1. The agent application has been listening on all events above enabling for the future agent to see the previous dialog.
 1. The agent application sends the outbound [`info`](#outbound-info) event telling the customer that the session has been placed in queue.
 1. The agent application sends the outbound [`queue_number`](#outbound-queue_number) event to show the customer current queue number.
+1. When the agent application sees the hand over event, the agent application claims the session by sending a [`claim_session`](#internal-claim_session) event so Sermo knows that the session is being handled.
 1. When the agent starts typing in the agent GUI an outbound [`typing_on`](#outbound-typing_on) event is sent and when the agent stops typing an outbound [`typing_off`](#outbound-typing_off) is sent.
 1. When the agent wants to suspend the session an internal [`agent_done`](#internal-agent_done) event is sent.
 1. When the agent wants to end the session an outbound [`end_session`](#outbound-end_session) event is sent.
@@ -122,20 +123,20 @@ Following are example scenarios that are quite different to give a broad underst
 1. The agent application calculate the probabilities that the customer is still there for all three sessions.
 1. Since the sum of all three probabilities add upp to 1.99 a new session is distributed to the agent.
 
-### A support session is handled by LiveChat
+### A support session is handled by an external agent application 
 
 1. A support session is started on the platform `comviq`.
-1. Sermo realizes that the session should be handled by LiveChat, a [`handover_to_queue`](#internal-handover_to_queue) event is sent with comviq_tech_support as a target queue.
-1. When livechat sees the hand over event, livechat claims the session by sending a [`claim_session`](#internal-claim_session) event so Sermo knows that the session is being handled.
-1. LiveChat is now in possesion of the session in question and deals with it as seen fit.
+1. Sermo realizes that the session should be handled by the agent application, a [`handover_to_queue`](#internal-handover_to_queue) event is sent with comviq_tech_support as a target queue.
+1. When the agent application sees the hand over event, the agent application claims the session by sending a [`claim_session`](#internal-claim_session) event so Sermo knows that the session is being handled.
+1. The agent applictaion is now in possesion of the session in question and deals with it as seen fit.
 
-### An assisted sales session is started in Sermo and handed over to LiveChat
+### An assisted sales session is started in Sermo and handed over to an external agent applictaion
 
 1. An assisted sales session is started in Sermo but the agent realizes that the customer want support help, not sales help.
-1. LiveChat has been listening on all events above enabling for the future agent in LiveChat to see the previous dialog.
+1. The agent application has been listening on all events above enabling for the future agent in the agent application to see the previous dialog.
 1. Agent in Sermo clicks on a transfer-to-queue drop down in Sermo and selects Comviq Teknisk Support. A [`handover_to_queue`](#internal-handover_to_queue) event is sent with comviq_tech_support as a target queue.
-1. When livechat sees the hand over event, livechat claims the session by sending a [`claim_session`](#internal-claim_session) event so Sermo knows that the session is being handled.
-1. LiveChat is now in possesion of the session in question and deals with it as seen fit.
+1. When the agent application sees the hand over event, the agent application claims the session by sending a [`claim_session`](#internal-claim_session) event so Sermo knows that the session is being handled.
+1. The agent application is now in possesion of the session in question and deals with it as seen fit.
 
 ## Common event attributes
 
