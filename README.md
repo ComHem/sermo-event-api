@@ -24,7 +24,7 @@ The events are all listed below and described in more detail in following sectio
 - [`inbound/messages_read`](#inbound-messages_read)
 - [`inbound/client_left`](#inbound-client_left)
 - [`inbound/client_unload`](#inbound-client_unload)
-- [`inbound/typing_on`](#inbound-typing_on)
+- [`inbound/typing`](#inbound-typing)
 - [`inbound/assisted_sales_identifier`](#inbound-assisted_sales_identifier)
 - [`outbound/queue_number`](#outbound-queue_number)
 - [`outbound/text`](#outbound-text)
@@ -230,13 +230,13 @@ The customer has closed the browser, the tab, or refreshed to page. Using https:
 }
 ```
 
-### inbound typing_on
+### inbound typing
 
 The inbound typing event is sent continuously when the customer is typing. This will enable the agent to see what the customer is about to send.
 
 ```json
 {
-  "type": "typing_on",
+  "type": "typing",
   "direction": "inbound",
   "userId": "8a8b5c18-c0dd-467b-bd77-7e7685fadf6d",
   "text": "Hej, jag mitt na",
