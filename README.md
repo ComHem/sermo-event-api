@@ -81,18 +81,20 @@ Following are example scenarios that are quite different to give a broad underst
 
 ### Standard scenario
 
+The agent application needs to listen for all events to be able to take over the session.
+
 1. A new customer opens a chat sessions from the web client and the web client starts sending [`heartbeat`](#inbound-heartbeat) events.
 1. When the customer is typing a message the inbound [`typing`](#inbound-typing) event is sent continuously enabling the agent application to show what the customer is typing before the message is sent.
 1. When the customer sends the first message an inbound [`text`](#inbound-text) event is sent.
-1. The bot waits until the customer has not typed for at least 3 seconds before answering by sending an outbound [`text`](#outbound-text-from-bot) event.
-1. The bot identifies customer intent and who the customer is after which a [`identified_customer`](#internal-customer_identified) event is sent out.
-1. The bot hands over to the agent application by sending the internal [`handover_to_queue`](#internal-handover_to_queue) event with the corresponding queue.
-1. The agent application has been listening on all events above enabling for the future agent to see the previous dialog.
+1. The bot replies by sending an outbound [`text`](#outbound-text-from-bot) event.
+1. The bot identifies the customer and sends a [`customer_identified`](#internal-customer_identified) event.
+1. The bot identifies customer intent and hands the session over to the proper queue by sending [`handover_to_queue`](#internal-handover_to_queue) event.
 1. The agent application sends the outbound [`info`](#outbound-info) event telling the customer that the session has been placed in queue.
-1. The agent application sends the outbound [`queue_number`](#outbound-queue_number) event to show the customer current queue number.
+1. The agent application sends the outbound [`queue_number`](#outbound-queue_number) event to show the customer current queue number. Additional `queue_number` events can be sent to update the queue number.
 1. When the agent starts typing in the agent GUI an outbound [`typing_on`](#outbound-typing_on) event is sent and when the agent stops typing an outbound [`typing_off`](#outbound-typing_off) is sent.
-1. When the agent wants to suspend the session an internal [`agent_done`](#internal-agent_done) event is sent.
-1. When the agent wants to end the session an outbound [`end_session`](#outbound-end_session) event is sent.
+1. When the agent wants to end the session either
+   1. send an internal [`agent_done`](#internal-agent_done) to enable the customer to be handed over to another agent. Note that this will not close the session and additional inbound events may be sent.
+   1. send an outbound [`end_session`](#outbound-end_session) to close the session permanently.
 1. When the customer closes the chat window an inbound [`client_left`](#inbound-client_left) event is sent.
 
 ### The bot asks if the customer is still there
@@ -335,7 +337,7 @@ The image can be retreived from http://sermo-api.comhem.com/images/IMAGE_ID
 
 ### outbound info 
 
-Outbound system event from the agent or bot to a customer.
+Outbound info event from the agent or bot to a customer. These events can be sent at any time. They will be displayed differently from normal text messages.
 
 ```json
 {
