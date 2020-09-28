@@ -172,7 +172,7 @@ Inbound image from the customer with an appended text.
   "type": "text",
   "direction": "inbound",
   "userId": "8a8b5c18-c0dd-467b-bd77-7e7685fadf6d",
-  "text": "Bifogad bild:",
+  "text": "Some image related text",
   "imageId": "some-image-id"
 }
 ```
@@ -328,7 +328,7 @@ Outbound image sent from the agent to the customer.
   "type": "text",
   "direction": "outbound",
   "userId": "8a8b5c18-c0dd-467b-bd77-7e7685fadf6d",
-  "text": "Bifogad bild:",
+  "text": "Some image related text",
   "imageId": "some-image-id"
 }
 ```
