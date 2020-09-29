@@ -392,6 +392,20 @@ Outbound web_url from the agent or bot to a customer. These events are used to p
 }
 ```
 
+### outbound image
+
+Outbound image tag from the agent or bot to a customer. The client application will render a image tag with the corresponding image url.
+
+```json
+{                                                                                  
+  "direction": "outbound",                                                         
+  "userId": "8a8b5c18-c0dd-467b-bd77-7e7685fadf6d",                                
+  "type": "image",                                                                 
+  "imageUrl": "https://some-host/some-image.png",                                                               
+  "altText": "some alt text"
+}
+```
+
 ### outbound typing_on
 
 Outbound event sent when the agent started typing a message.
