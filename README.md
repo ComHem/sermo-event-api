@@ -20,6 +20,7 @@ All events are using the following attributes:
 The events are all listed below and described in more detail in following sections:
 
 - [`inbound/text`](#inbound-text)
+- [`inbound/text`](#inbound-postback)
 - [`inbound/heartbeat`](#inbound-heartbeat)
 - [`inbound/messages_read`](#inbound-messages_read)
 - [`inbound/client_left`](#inbound-client_left)
@@ -29,6 +30,8 @@ The events are all listed below and described in more detail in following sectio
 - [`outbound/queue_number`](#outbound-queue_number)
 - [`outbound/text`](#outbound-text)
 - [`outbound/info`](#outbound-info)
+- [`outbound/postback`](#outbound-postback)
+- [`outbound/web_url`](#outbound-web_url)
 - [`outbound/typing_on`](#outbound-typing_on)
 - [`outbound/typing_off`](#outbound-typing_off)
 - [`outbound/platform_closed`](#outbound-platform_closed)
@@ -174,6 +177,20 @@ Inbound image from the customer with an appended text.
   "userId": "8a8b5c18-c0dd-467b-bd77-7e7685fadf6d",
   "text": "Some image related text",
   "imageId": "some-image-id"
+}
+```
+
+### inbound postback
+
+Inbound postback events are sent from the client application as a response to a [`outbound/postback`](#outbound-postback) event.
+
+```json
+{
+  "type": "postback",
+  "direction": "inbound",
+  "userId": "8a8b5c18-c0dd-467b-bd77-7e7685fadf6d",
+  "text": "Selection 1",
+  "payload": "postback-alternative-1"
 }
 ```
 
@@ -329,7 +346,13 @@ Outbound image sent from the agent to the customer.
   "direction": "outbound",
   "userId": "8a8b5c18-c0dd-467b-bd77-7e7685fadf6d",
   "text": "Some image related text",
-  "imageId": "some-image-id"
+  "imageId": "some-image-id",
+  "agent": {
+    "id": "bot",
+    "name": "Bot",
+    "avatarId": "avatar1",
+    "avatarUrl": "https://some-url.png"
+  }
 }
 ```
 
@@ -345,6 +368,66 @@ Outbound info event from the agent or bot to a customer. These events can be sen
   "direction": "outbound",
   "userId": "8a8b5c18-c0dd-467b-bd77-7e7685fadf6d",
   "text": "Chatten har placerats i kön \"Com Hem allmänt\""
+}
+```
+
+### outbound postback
+
+Outbound postback from the agent or bot to a customer. These events are used to give the user a set of options to reply with. They will be rendered as buttons in the client application. When the user clicks the button, an [`inbound/postback`](#inbound-postback) event will be sent with the corresponding payload.
+
+```json
+{
+  "type": "postback",
+  "direction": "outbound",
+  "userId": "8a8b5c18-c0dd-467b-bd77-7e7685fadf6d",
+  "text": "Alternativ 1",
+  "payload": "postback-alternative-1",
+  "agent": {
+    "id": "bot",
+    "name": "Bot",
+    "avatarId": "avatar1",
+    "avatarUrl": "https://some-url.png"
+  }
+}
+```
+
+### outbound web_url
+
+Outbound web_url from the agent or bot to a customer. These events are used to provide the user with a call to action. The client application will render a button that will open a new tab with the specified URL when clicked.
+
+```json
+{
+  "type": "web_url",
+  "direction": "outbound",
+  "userId": "8a8b5c18-c0dd-467b-bd77-7e7685fadf6d",
+  "text": "Check your order",
+  "url": "https://somehost.com",
+  "agent": {
+    "id": "bot",
+    "name": "Bot",
+    "avatarId": "avatar1",
+    "avatarUrl": "https://some-url.png"
+  }
+}
+```
+
+### outbound image
+
+Outbound image tag from the agent or bot to a customer. The client application will render a image tag with the corresponding image url.
+
+```json
+{
+  "direction": "outbound",
+  "userId": "8a8b5c18-c0dd-467b-bd77-7e7685fadf6d",
+  "type": "image",
+  "imageUrl": "https://some-host/some-image.png",
+  "altText": "some alt text",
+  "agent": {
+    "id": "bot",
+    "name": "Bot",
+    "avatarId": "avatar1",
+    "avatarUrl": "https://some-url.png"
+  }
 }
 ```
 
