@@ -345,7 +345,13 @@ Outbound image sent from the agent to the customer.
   "direction": "outbound",
   "userId": "8a8b5c18-c0dd-467b-bd77-7e7685fadf6d",
   "text": "Some image related text",
-  "imageId": "some-image-id"
+  "imageId": "some-image-id",
+  "agent": {
+    "id": "bot",
+    "name": "Bot",
+    "avatarId": "avatar1",
+    "avatarUrl": "https://some-url.png"
+  }
 }
 ```
 
@@ -374,7 +380,13 @@ Outbound postback from the agent or bot to a customer. These events are used to 
   "direction": "outbound",
   "userId": "8a8b5c18-c0dd-467b-bd77-7e7685fadf6d",
   "text": "Alternativ 1",
-  "payload": "postback-alternative-1"
+  "payload": "postback-alternative-1",
+  "agent": {
+    "id": "bot",
+    "name": "Bot",
+    "avatarId": "avatar1",
+    "avatarUrl": "https://some-url.png"
+  }
 }
 ```
 
@@ -388,7 +400,13 @@ Outbound web_url from the agent or bot to a customer. These events are used to p
   "direction": "outbound",
   "userId": "8a8b5c18-c0dd-467b-bd77-7e7685fadf6d",
   "text": "Check your order",
-  "url": "https://somehost.com"
+  "url": "https://somehost.com",
+  "agent": {
+    "id": "bot",
+    "name": "Bot",
+    "avatarId": "avatar1",
+    "avatarUrl": "https://some-url.png"
+  }
 }
 ```
 
@@ -397,12 +415,18 @@ Outbound web_url from the agent or bot to a customer. These events are used to p
 Outbound image tag from the agent or bot to a customer. The client application will render a image tag with the corresponding image url.
 
 ```json
-{                                                                                  
-  "direction": "outbound",                                                         
-  "userId": "8a8b5c18-c0dd-467b-bd77-7e7685fadf6d",                                
-  "type": "image",                                                                 
-  "imageUrl": "https://some-host/some-image.png",                                                               
-  "altText": "some alt text"
+{
+  "direction": "outbound",
+  "userId": "8a8b5c18-c0dd-467b-bd77-7e7685fadf6d",
+  "type": "image",
+  "imageUrl": "https://some-host/some-image.png",
+  "altText": "some alt text",
+  "agent": {
+    "id": "bot",
+    "name": "Bot",
+    "avatarId": "avatar1",
+    "avatarUrl": "https://some-url.png"
+  }
 }
 ```
 
