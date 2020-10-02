@@ -189,6 +189,7 @@ Inbound postback events are sent from the client application as a response to a 
   "type": "postback",
   "direction": "inbound",
   "userId": "8a8b5c18-c0dd-467b-bd77-7e7685fadf6d",
+  "text": "Selection 1",
   "payload": "postback-alternative-1"
 }
 ```
