@@ -19,14 +19,14 @@ All events are using the following attributes:
 
 The events are all listed below and described in more detail in following sections:
 
+- [`inbound/start`](#inbound-start)
 - [`inbound/text`](#inbound-text)
-- [`inbound/text`](#inbound-postback)
+- [`inbound/postback`](#inbound-postback)
 - [`inbound/heartbeat`](#inbound-heartbeat)
 - [`inbound/messages_read`](#inbound-messages_read)
 - [`inbound/client_left`](#inbound-client_left)
 - [`inbound/client_unload`](#inbound-client_unload)
 - [`inbound/typing`](#inbound-typing)
-- [`inbound/assisted_sales_identifier`](#inbound-assisted_sales_identifier)
 - [`outbound/queue_number`](#outbound-queue_number)
 - [`outbound/text`](#outbound-text)
 - [`outbound/info`](#outbound-info)
@@ -86,7 +86,7 @@ Following are example scenarios that are quite different to give a broad underst
 
 The agent application needs to listen for all events to be able to take over the session.
 
-1. A new customer opens a chat sessions from the web client and the web client starts sending [`heartbeat`](#inbound-heartbeat) events.
+1. A new customer opens a chat sessions from the web client, a [`start`](#inbound-start) event is sent followed by [`heartbeat`](#inbound-heartbeat) events.
 1. When the customer is typing a message the inbound [`typing`](#inbound-typing) event is sent continuously enabling the agent application to show what the customer is typing before the message is sent.
 1. When the customer sends the first message an inbound [`text`](#inbound-text) event is sent.
 1. The bot replies by sending an outbound [`text`](#outbound-text-from-bot) event.
@@ -152,6 +152,22 @@ Following attributes are used for almost all events.
 ## Inbound
 
 Inbound events are events sent from customer to the bot or the agent application.
+
+
+### inbound start
+
+Sent when a customer starts a new conversation. The `params` property will be an object representing some select query parameters that was used to open the conversation.
+
+```json
+{
+  "type": "start",
+  "direction": "inbound",
+  "userId": "8a8b5c18-c0dd-467b-bd77-7e7685fadf6d",
+  "params": {
+    // start parameters
+  }
+}
+```
 
 ### inbound text
 
@@ -260,20 +276,6 @@ The inbound typing event is sent continuously when the customer is typing. This 
   "userId": "8a8b5c18-c0dd-467b-bd77-7e7685fadf6d",
   "text": "Hej, jag mitt na",
   "at": "2020-02-18T14:41:37.571Z"
-}
-```
-
-### inbound assisted_sales_identifier
-
-Assisted sales identifier event with sales lead id and session id.
-
-```json
-{
-  "type": "assisted_sales_identifier",
-  "direction": "inbound",
-  "userId": "89462d14-f96c-4cc1-85b2-9fa8ad8eb961",
-  "niSalesLeadId": "123-abc",
-  "niSessionId": "456-def"
 }
 ```
 
