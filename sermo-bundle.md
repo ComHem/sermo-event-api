@@ -87,6 +87,21 @@ The value for `niSessionId` should be the ID of the session that NowInteract pro
 }
 ```
 
+### How to start a chat on a specific platform
+
+```json
+{
+  "sender": "WEBSITE_BRAND",
+  "receiver": "sermo",
+  "event": "START_CHAT",
+  "customerId": "12345678",
+  "zIndex": 1501,
+  "platformId": "PLATFORM"
+}
+```
+
+Where platformId is the specific platform you would like to open a chat on.
+
 ## What the Sermo Bundle will do
 
 The bundle will listen for messages with the receiver "sermo" and open an iFrame for the customer to `https://sermo.comhem.com`.
