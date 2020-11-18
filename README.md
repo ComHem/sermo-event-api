@@ -32,6 +32,8 @@ The events are all listed below and described in more detail in following sectio
 - [`outbound/info`](#outbound-info)
 - [`outbound/postback`](#outbound-postback)
 - [`outbound/web_url`](#outbound-web_url)
+- [`outbound/image`](#outbound-image)
+- [`outbound/carousel`](#outbound-carousel)
 - [`outbound/typing_on`](#outbound-typing_on)
 - [`outbound/typing_off`](#outbound-typing_off)
 - [`outbound/platform_closed`](#outbound-platform_closed)
@@ -196,6 +198,8 @@ Inbound image from the customer with an appended text.
 }
 ```
 
+The image can be retreived from http://sermo-api.comhem.com/images/IMAGE_ID
+
 ### inbound postback
 
 Inbound postback events are sent from the client application as a response to a [`outbound/postback`](#outbound-postback) event.
@@ -209,8 +213,6 @@ Inbound postback events are sent from the client application as a response to a 
   "payload": "postback-alternative-1"
 }
 ```
-
-The image can be retreived from http://sermo-api.comhem.com/images/IMAGE_ID
 
 ### inbound heartbeat
 
@@ -432,6 +434,44 @@ Outbound image tag from the agent or bot to a customer. The client application w
   }
 }
 ```
+
+### outbound carousel
+
+Outbound carousel from the agent or bot to a customer. The carousel can contain one or more cards which will be displayed as a carousel in the client application. Each card can contain title, subtitle, an image as well as a list of buttons. The buttons can be of type `postback` or `web_url`.
+
+```json
+{
+  "direction": "outbound",
+  "userId": "8a8b5c18-c0dd-467b-bd77-7e7685fadf6d",
+  "type": "carousel",
+  "agent": {
+    "id": "bot",
+    "name": "Bot",
+    "avatarId": "avatar1",
+    "avatarUrl": "https://some-url.png"
+  },
+  "cards": [
+    {
+      "title": "Card title",
+      "subtitle": "Card subtitle (optional)",
+      "imageUrl": "Card image URL (optional)",
+      "buttons": [
+        {
+          "type": "postback",
+          "text": "Postback",
+          "payload": "postback-payload"
+        },
+        {
+          "type": "web_url",
+          "text": "Click here",
+          "url": "http://google.com"
+        }
+      ]
+    }
+  ]
+}
+```
+
 
 ### outbound typing_on
 
