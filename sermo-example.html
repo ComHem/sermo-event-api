@@ -21,6 +21,22 @@
                 platformId: "webchat"
             });
         });
+
+
+        // Availability check on startup
+        fetch('https://sermo-webchat-ci1.sermo.dev-dockeree.int.comhem.com/api/platforms/webchat').then(async res => {
+            if (!res.ok) {
+                button.disabled = true;
+                console.log("Failed to get availability")
+                return;
+            }
+
+            const availability = await res.json();
+            if (!availability.available) {
+                button.title = "Chat is no available at the moment"
+                button.disabled = true;
+            }
+        })
     </script>
 </body>
 
