@@ -1,202 +1,130 @@
 # Sermo JavaScript Bundle
 
-The Sermo JavaScript bundle can be included on a website and can be interfaced with `window.postMessage` (https://developer.mozilla.org/en-US/docs/Web/API/Window/postMessage).
-It's a minified bundle that handles the lifecycle of the Sermo chat window.
-
-## Setup
-
-Include a script that with any of these scripts within the head block of your site.
-
-| env  | host |
-| -    | -    |
-| dev  | https://sermo-webchat-ci1.sermo.dev-dockeree.int.comhem.com/bundle/sermo.ci1.js |
-| prod | https://sermo.comhem.com/bundle/sermo.min.js |
-
-All interactions with the sermo bundle is done through window.postMessage. The sender of each message should be the brand of the site that is sending the message.
-
-Available brands are
-
-- comhem
-- comviq
-- boxer
-
-## Starting chats
-
-To start a chat a message is sent through `window.postMessage` with a payload that corresponds to the type of chat you want to start.
-
-### Common
-
-The common parts for all events are:
-
-```json
-{
-  "sender": "WEBSITE_BRAND",
-  "receiver": "sermo",
-  "event": "...",
-  "customerId": "12345678",
-  "zIndex": 1501
-  ...
-}
-```
-
-Where the `WEBSITE_BRAND` string should be the brand of the website.
-
-The value of `customerId` should be provided if the customer is logged in on the site. Doing so enables the bot to not ask for it and only request the intent of the customer. This is an optional field.
-
-The value for `zIndex` is used so that we can make sure that the CSS `z-index` we open the iFrame with is the highest on the page. If is this value is not provided it will be defaulted to 10000
-
-### How to start a support chat
-
-```json
-{
-  "sender": "WEBSITE_BRAND",
-  "receiver": "sermo",
-  "event": "START_SUPPORT_CHAT",
-  "customerId": "12345678",
-  "zIndex": 1501
-}
-```
-
-### How to start a sales chat
-
-```json
-{
-  "sender": "WEBSITE_BRAND",
-  "receiver": "sermo",
-  "event": "START_SALES_CHAT",
-  "customerId": "12345678",
-  "niSalesLeadId": "lead-123",
-  "niSessionId": "session-123",
-  "zIndex": 1501
-}
-```
-
-The value for `niSalesLeadId` should be the ID of the lead that NowInteract provides to the website.
-
-The value for `niSessionId` should be the ID of the session that NowInteract provides to the website.
-
-### How to start a save chat
-
-```json
-{
-  "sender": "WEBSITE_BRAND",
-  "receiver": "sermo",
-  "event": "START_SAVE_CHAT",
-  "customerId": "12345678",
-  "zIndex": 1501
-}
-```
-
-### How to start a chat on a specific platform
-
-```json
-{
-  "sender": "WEBSITE_BRAND",
-  "receiver": "sermo",
-  "event": "START_CHAT",
-  "customerId": "12345678",
-  "zIndex": 1501,
-  "platformId": "PLATFORM"
-}
-```
-
-Where platformId is the specific platform you would like to open a chat on.
-
-## What the Sermo Bundle will do
+The Sermo JavaScript bundle provides a straight forward way to interface with Sermo Webchat. Communication between your website and Sermo is done through `window.postMessage` (https://developer.mozilla.org/en-US/docs/Web/API/Window/postMessage). The bundle is minified and manages the lifecycle of the Sermo Webchat window through an insterted DOM-element in the body-tag.
 
 The bundle will listen for messages with the receiver "sermo" and open an iFrame for the customer to `https://sermo.comhem.com`.
 
 A key will be saved in the Session Storage by the bundle to keep track of the state of the chat.
 Cookies will be saved for the domain `https://sermo.comhem.com` so that Sermo can identify the customer.
 
-There are also certain events that the bundle will emit for that can be listened to if needed.
+## TLDR
 
-### Events published by the sermo-bundle
+1. Include [sermo.ci1.js](https://sermo-webchat-ci1.sermo.dev-dockeree.int.comhem.com/bundle/sermo.ci1.js) (dev) or [sermo.min.js](https://sermo.comhem.com/bundle/sermo.min.js) (prod).
+1. Post a START_CHAT event. 
+```js
+window.postMessage({ 
+  sender: 'comhem/comviq/boxer', 
+  receiver: 'sermo', 
+  event: 'START_CHAT', 
+  platformId: '<platform>'
+});
+```
+3. Chat should open. If not - check error logs. If that doesn't help, keep reading.
 
-#### The chat conversation with the customer has started
+## Setup
 
-A chat conversation is seen as started when the customer has sent their first message to the bot/agent.
+The script is hosted on webchat and should be included within the `<head>` tag of your website. For development purposes, use the `dev` bundle as specified below.
 
-A message will be sent through `window.postMessage` with the following payload when that occurs:
+| env  | host |
+| -    | -    |
+| dev  | https://sermo-webchat-ci1.sermo.dev-dockeree.int.comhem.com/bundle/sermo.ci1.js |
+| prod | https://sermo.comhem.com/bundle/sermo.min.js |
+
+See [sermo-example.html](./sermo-example.html) for a working minimal example site using the development bundle.
+
+## Brands
+
+Sermo is used by multiple brands. Currently, these brands are supported:
+
+- `comhem`
+- `comviq`
+- `comhemplay`
+
+The chat window appearance is based on brand and/or platform.
+
+## Platforms
+
+Sermo supports multiple platforms or chat _channels_ for each brand. For example, comhem has a support platform, a sales platform and a save platform. The platform indicates to Sermo _how_ the customer entered the chat.
+
+Ask the Sermo team which platforms are setup for your brand.
+
+Before opening a chat on a specific platform, make sure it is open and has available agents. This information is available on the `/platforms/<PLATFORM>` endpoint. Below is the endpoint for the platform `webchat` on the development and production environments.
+
+| env  | host |
+| -    | -    |
+| dev  | https://sermo-webchat-ci1.sermo.dev-dockeree.int.comhem.com/api/platforms/webchat |
+| prod | https://sermo.comhem.com/api/platforms/webchat |
+
+The response will look like this if the platform is available
 
 ```json
 {
-  "sender": "sermo",
-  "receiver": "WEBSITE_BRAND",
-  "event": "CHAT_CONVERSATION_STARTED"
+  "queueId": "ch",
+  "available": true,
+  "closed": false,
+  "hasWorkingAgents": true
 }
 ```
 
-#### The chat is closed by the customer
-
-When the chat is closed the bundle will clean up the iFrame by itself.
-
-A message will also be sent through `window.postMessage` with this format:
+It could look like this when the platform is _closed_
 
 ```json
 {
-  "sender": "sermo",
-  "receiver": "WEBSITE_BRAND",
-  "event": "CHAT_CLOSED"
+  "queueId": "ch",
+  "available": false,
+  "closed": true
 }
 ```
 
-#### The chat is minimized by the customer
+- `queueId` - Not applicable here. This is the name of the queue that sermo will place the customer in.
+- `available` - Specifies if there are enough agents to take more chats. This will be set to `false` if the queue is too long. No new conversations should be started if this value is `false`.
+- `closed` - Specifies if the platform is closed. Sermo will not accept any new conversations if this value is `true`.
+- `hasWorkingAgents` - Specifies if there are any agents working to take conversations from this platform.
 
-A message will be sent through `window.postMessage` when the Sermo chat window is minimized:
+## Start chat
 
-```json
-{
-  "sender": "sermo",
-  "receiver": "WEBSITE_BRAND",
-  "event": "CHAT_MINIMIZED"
-}
+Send a message using `window.postMessage`, replace `<BRAND>` and `<PLATFORM>` with your specific values.
+
+```js
+window.postMessage({
+  sender: '<BRAND>',
+  receiver: 'sermo',
+  event: 'START_CHAT',
+  platformId: '<PLATFORM>'
+});
 ```
 
-#### The chat is maximized by the customer
+### Options
 
-A message will be sent through `window.postMessage` when the Sermo chat window is maximized again:
+In addition to the required properties above, it is also possible to include
 
-```json
-{
-  "sender": "sermo",
-  "receiver": "WEBSITE_BRAND",
-  "event": "CHAT_MAXIMIZED"
-}
+- `zIndex` - set to a specific value to determine which zIndex the chat window will be placed at. Defaults to 10000. 
+- `customerId` - if the customer is logged in, provide their customerId to inform the customer support agent who it is.
+
+
+## Common errors
+
+Below are some common sources of errors if the chat window fails to appear. Remember to check the console for any errors.
+
+### Invalid cert - "Your connection is not private"
+
+Make sure your browser can download and show the script on this URL without errors: https://sermo-webchat-ci1.sermo.dev-dockeree.int.comhem.com/bundle/sermo.ci1.js
+
+The development environment does not have a valid cert. It needs to be explicitly trusted by you first.  by the browser. Otherwise it will not download the script from the development environment.
+
+### Invalid platform
+
+If you see an error similar to this: 
+
+```
+GET https://sermo-webchat-ci1.sermo.dev-dockeree.int.comhem.com/api/platforms/webbchatt 404 (Not Found)
 ```
 
-### Additional events that the Sermo Bundle will listen for
+It means that the specified platform does not exist in Sermo. Check the spelling and try again. In this case it should be `webbchatt -> webchat`.
 
-In addition to the event to start a chat the Sermo bundle will listen for more events.
-Customer identification and order placement will be used to connect chat sessions to what the customer does on the website during the chat session and after.
+## Additional events 
 
-
-#### The user logs in
-
-Send a message through `window.postMessage` with a payload of this format:
-
-```json
-{
-  "sender": "WEBSITE_BRAND",
-  "receiver": "sermo",
-  "event": "CUSTOMER_LOGGED_IN",
-  "customerId": "12345678"
-}
-```
-
-#### The user logs out
-
-Send a message through `window.postMessage` with a payload of this format:
-
-```json
-{
-  "sender": "WEBSITE_BRAND",
-  "receiver": "sermo",
-  "event": "CUSTOMER_LOGGED_OUT",
-}
-```
-
-#### The customer places an order
+### The customer places an order
 
 This event is specific for the comhem brand. Not usable on other brands.
 
@@ -228,4 +156,3 @@ Send a message through `window.postMessage` with a payload of this format:
   ]
 }
 ```
-
