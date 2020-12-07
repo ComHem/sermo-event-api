@@ -122,6 +122,58 @@ GET https://sermo-webchat-ci1.sermo.dev-dockeree.int.comhem.com/api/platforms/we
 
 It means that the specified platform does not exist in Sermo. Check the spelling and try again. In this case it should be `webbchatt -> webchat`.
 
+## NowInteract
+
+The script also integrates with NowInteract using `window.postMessage`.
+
+### Incoming messages
+
+Incoming messages from NowInteract are used to open chat windows.
+
+```json
+{
+  "sender": "nowinteract",
+  "receiver": "comhem",
+  "event": "<CHAT_TYPE>",
+  "platformId": "<PLATFORM>",
+  "nowinteract_visitorid": "<NI_VISITOR_ID>",
+  "nowinteract_leadid": "<NI_LEAD_ID>"
+}
+```
+
+`CHAT_TYPE` specifies the type of chat to start. This is used by sermo to decide which platform to open the chat on. Currently these values are supported:
+
+- `start_sales_chat`
+- `start_churn_chat`
+- `start_web_chat `
+- `start_fa_chat`
+
+`PLATFORM` is an optional property and can be used to explicitly specify which platform to use. For example, this can be used to route some customers to the bot, and others straight to a human agent.
+
+`NI_VISITOR_ID` specifies the NowInteract visitor or session id.
+
+`NI_LEAD_ID` specifies the NowInteract lead id. Also known as _assistance id_.
+
+### Outgoing messages
+
+Outgoing messages are used to notify NowInteract about the users interaction with the chat window.
+
+```json
+{ 
+  "sender": "comhem", 
+  "receiver": "nowinteract", 
+  "eventName": "<EVENT>"
+}
+```
+
+Where `eventName` is one of the following
+
+- `chat_window_opened` - when sermo has succesfully opened the chat window.
+- `chat_conversation_ended` - when the chat window has been closed.
+- `chat_window_minimized` - when the chat window is minimized.
+- `chat_window_maximized` - when the chat window is maximized.
+- `chat_conversation_started` - when the customer sends their first message through the chat window.
+
 ## Additional events 
 
 ### The customer places an order
