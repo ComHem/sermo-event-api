@@ -106,11 +106,11 @@ In addition to the required properties above, it is also possible to include
 
 Below are some common sources of errors if the chat window fails to appear. Remember to check the console for any errors.
 
-### Invalid cert - "Your connection is not private"
+### ERR_CERT_AUTHORITY_INVALID / Invalid cert - "Your connection is not private"
 
-Make sure your browser can download and show the script on this URL without errors: https://sermo-webchat-ci1.sermo.dev-dockeree.int.comhem.com/bundle/sermo.ci1.js
+The development environment does not have a valid cert. It needs to be explicitly trusted. Otherwise it will not download the script from the development environment.
 
-The development environment does not have a valid cert. It needs to be explicitly trusted by you first.  by the browser. Otherwise it will not download the script from the development environment.
+If your browser prints an ERR_CERT_AUTHORITY_INVALID error, make sure your browser can download and show the script on this URL without errors: https://sermo-webchat-ci1.sermo.dev-dockeree.int.comhem.com/bundle/sermo.ci1.js. If you get an error or warning saying "Your connection is not private", follow your browsers instructions to proceed. In chrome, click "Advanced" then "proceed to ... (unsafe)"
 
 ### Invalid platform
 
