@@ -267,13 +267,13 @@ The customer has closed the browser, the tab, or refreshed to page. Using https:
 }
 ```
 
-### inbound typing
+### inbound typing_on
 
-The inbound typing event is sent continuously when the customer is typing. This will enable the agent to see what the customer is about to send.
+The inbound typing_on event is sent continuously when the customer is typing. This will enable the agent to see what the customer is about to send.
 
 ```json
 {
-  "type": "typing",
+  "type": "typing_on",
   "direction": "inbound",
   "userId": "8a8b5c18-c0dd-467b-bd77-7e7685fadf6d",
   "text": "Hej, jag mitt na",
