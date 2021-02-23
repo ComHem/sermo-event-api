@@ -75,9 +75,6 @@ socket.on('message', ev => {
 });
 ```
 
-## Troubleshooting
-
-
 ## Example Scenarios
 
 Following are example scenarios that are quite different to give a broad understanding on how the system works. Almost all are important to keep the AHT down so it is important that they are implemented.
