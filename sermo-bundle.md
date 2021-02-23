@@ -9,7 +9,7 @@ Cookies will be saved for the domain `https://sermo.comhem.com` so that Sermo ca
 
 ## TLDR
 
-1. Include [sermo.ci1.js](https://sermo-webchat-ci1.sermo.dev-dockeree.int.comhem.com/bundle/sermo.ci1.js) (dev) or [sermo.min.js](https://sermo.comhem.com/bundle/sermo.min.js) (prod).
+1. Include [sermo.ci1.js](https://sermo-webchat-ci1.dev-dockeree.int.comhem.com/bundle/sermo.ci1.js) (dev) or [sermo.min.js](https://sermo.comhem.com/bundle/sermo.min.js) (prod).
 1. Post a START_CHAT event. 
 ```js
 window.postMessage({ 
@@ -27,7 +27,7 @@ The script is hosted on webchat and should be included within the `<head>` tag o
 
 | env  | host |
 | -    | -    |
-| dev  | https://sermo-webchat-ci1.sermo.dev-dockeree.int.comhem.com/bundle/sermo.ci1.js |
+| dev  | https://sermo-webchat-ci1.dev-dockeree.int.comhem.com/bundle/sermo.ci1.js |
 | prod | https://sermo.comhem.com/bundle/sermo.min.js |
 
 See [sermo-example.html](./sermo-example.html) for a working minimal example site using the development bundle.
@@ -52,7 +52,7 @@ Before opening a chat on a specific platform, make sure it is open and has avail
 
 | env  | host |
 | -    | -    |
-| dev  | https://sermo-webchat-ci1.sermo.dev-dockeree.int.comhem.com/api/platforms/webchat |
+| dev  | https://sermo-webchat-ci1.dev-dockeree.int.comhem.com/api/platforms/webchat |
 | prod | https://sermo.comhem.com/api/platforms/webchat |
 
 The response will look like this if the platform is available
@@ -106,18 +106,13 @@ In addition to the required properties above, it is also possible to include
 
 Below are some common sources of errors if the chat window fails to appear. Remember to check the console for any errors.
 
-### ERR_CERT_AUTHORITY_INVALID / Invalid cert - "Your connection is not private"
-
-The development environment does not have a valid certificate. This certificate needs to be explicitly trusted otherwise the browser will not download the script from the development environment.
-
-If the browser prints an ERR_CERT_AUTHORITY_INVALID error, make sure your browser can download and show the script on this URL without errors: https://sermo-webchat-ci1.sermo.dev-dockeree.int.comhem.com/bundle/sermo.ci1.js. If you get an error or warning saying "Your connection is not private", follow your browsers instructions to proceed. In chrome, click "Advanced" then "proceed to ... (unsafe)"
 
 ### Invalid platform
 
 If you see an error similar to this: 
 
 ```
-GET https://sermo-webchat-ci1.sermo.dev-dockeree.int.comhem.com/api/platforms/webbchatt 404 (Not Found)
+GET https://sermo-webchat-ci1.dev-dockeree.int.comhem.com/api/platforms/webbchatt 404 (Not Found)
 ```
 
 It means that the specified platform does not exist in Sermo. Check the spelling and try again. In this case it should be `webbchatt -> webchat`.

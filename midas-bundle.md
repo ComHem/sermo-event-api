@@ -11,7 +11,7 @@ Two keys will be saved as client cookies by the bundle to keep track of what use
 
 ## TLDR
 
-1. Include [midas.ci1.js](https://sermo-midas-ci1.sermo.dev-dockeree.int.comhem.com/bundle/midas.ci1.js) (dev) or [midas.min.js](https://sermo-midas.comhem.com/bundle/midas.min.js) (prod) in the head-block of your site.
+1. Include [midas.ci1.js](https://sermo-midas-ci1.dev-dockeree.int.comhem.com/bundle/midas.ci1.js) (dev) or [midas.min.js](https://sermo-midas.comhem.com/bundle/midas.min.js) (prod) in the head-block of your site.
 1. Open up your site in any browser. 
 1. Navigate to a new page on your site.
 1. A track-session event should have been sent. Check the network log in your browser.

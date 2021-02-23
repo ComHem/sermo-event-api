@@ -53,7 +53,7 @@ An API-key is required to connect. Contact the sermo team at ch-sermo@tele2.com.
 
 | env  | host |
 | -    | -    |
-| dev  | sermo-api-ci1.sermo.dev-dockeree.int.comhem.com |
+| dev  | sermo-api-ci1.dev-dockeree.int.comhem.com |
 | prod | sermo-api.comhem.com |
 
 
@@ -74,11 +74,6 @@ socket.on('message', ev => {
   // -> { direction: 'outbound', type: 'text', ... }
 });
 ```
-
-## Troubleshooting
-
-If you are testing the connection using your browser, please make sure that you have accepted the certificate on the test environment. Visit the health endpoint in your browser: https://sermo-api-ci1.sermo.dev-dockeree.int.comhem.com/health
-
 
 ## Example Scenarios
 
