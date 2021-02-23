@@ -3,7 +3,7 @@
 
 <head>
     <script async type="text/javascript"
-        src="https://sermo-webchat-ci1.sermo.dev-dockeree.int.comhem.com/bundle/sermo.ci1.js"></script>
+        src="https://sermo-webchat-ci1.dev-dockeree.int.comhem.com/bundle/sermo.ci1.js"></script>
 
 </head>
 
@@ -24,7 +24,7 @@
 
 
         // Availability check on startup
-        fetch('https://sermo-webchat-ci1.sermo.dev-dockeree.int.comhem.com/api/platforms/webchat').then(async res => {
+        fetch('https://sermo-webchat-ci1.dev-dockeree.int.comhem.com/api/platforms/webchat').then(async res => {
             if (!res.ok) {
                 button.disabled = true;
                 console.log("Failed to get availability")
