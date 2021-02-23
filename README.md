@@ -77,8 +77,6 @@ socket.on('message', ev => {
 
 ## Troubleshooting
 
-If you are testing the connection using your browser, please make sure that you have accepted the certificate on the test environment. Visit the health endpoint in your browser: https://sermo-api-ci1.dev-dockeree.int.comhem.com/health
-
 
 ## Example Scenarios
 
