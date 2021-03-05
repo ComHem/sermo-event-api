@@ -10,25 +10,27 @@ Cookies will be saved for the domain `https://sermo.comhem.com` so that Sermo ca
 ## TLDR
 
 1. Include [sermo.ci1.js](https://sermo-webchat-ci1.dev-dockeree.int.comhem.com/bundle/sermo.ci1.js) (dev) or [sermo.min.js](https://sermo.comhem.com/bundle/sermo.min.js) (prod).
-1. Post a START_CHAT event. 
+1. Post a START_CHAT event.
+
 ```js
-window.postMessage({ 
-  sender: 'comhem/comviq/boxer', 
-  receiver: 'sermo', 
-  event: 'START_CHAT', 
-  platformId: '<platform>'
+window.postMessage({
+  sender: "comhem/comviq/boxer",
+  receiver: "sermo",
+  event: "START_CHAT",
+  platformId: "<platform>",
 });
 ```
+
 3. Chat should open. If not - check error logs. If that doesn't help, keep reading.
 
 ## Setup
 
 The script is hosted on webchat and should be included within the `<head>` tag of your website. For development purposes, use the `dev` bundle as specified below.
 
-| env  | host |
-| -    | -    |
+| env  | host                                                                      |
+| ---- | ------------------------------------------------------------------------- |
 | dev  | https://sermo-webchat-ci1.dev-dockeree.int.comhem.com/bundle/sermo.ci1.js |
-| prod | https://sermo.comhem.com/bundle/sermo.min.js |
+| prod | https://sermo.comhem.com/bundle/sermo.min.js                              |
 
 See [sermo-example.html](./sermo-example.html) for a working minimal example site using the development bundle.
 
@@ -48,12 +50,22 @@ Sermo supports multiple platforms or chat _channels_ for each brand. For example
 
 Ask the Sermo team which platforms are setup for your brand.
 
-Before opening a chat on a specific platform, make sure it is open and has available agents. This information is available on the `/platforms/<PLATFORM>` endpoint. Below is the endpoint for the platform `webchat` on the development and production environments.
+Before opening a chat on a specific platform, make sure it is open and has available agents. The bundle exposes a `SERMO` global variable that emits platform availability information. For example:
 
-| env  | host |
-| -    | -    |
-| dev  | https://sermo-webchat-ci1.dev-dockeree.int.comhem.com/api/platforms/webchat |
-| prod | https://sermo.comhem.com/api/platforms/webchat |
+```js
+window.SERMO.setAvailabilityListener("webchat", (info) => {
+  console.log(info);
+}, { pollingInterval: 5000 });
+
+// window.SERMO.clearAvailabilityListener("webchat") to remove the listener
+```
+
+This will start a polling loop to the public sermo-api at `/api/platforms/<PLATFORM>` and emit the response periodically. You can also check the endpoint directly at the following URL:
+
+| env  | host                                                                       |
+| ---- | -------------------------------------------------------------------------- |
+| dev  | https://sermo-api-ci1.dev-dockeree.int.comhem.com/api/platforms/comhemplay |
+| prod | https://sermo-api.comhem.com/api/platforms/comhemplay                      |
 
 The response will look like this if the platform is available
 
@@ -87,10 +99,10 @@ Send a message using `window.postMessage`, replace `<BRAND>` and `<PLATFORM>` wi
 
 ```js
 window.postMessage({
-  sender: '<BRAND>',
-  receiver: 'sermo',
-  event: 'START_CHAT',
-  platformId: '<PLATFORM>'
+  sender: "<BRAND>",
+  receiver: "sermo",
+  event: "START_CHAT",
+  platformId: "<PLATFORM>",
 });
 ```
 
@@ -98,21 +110,19 @@ window.postMessage({
 
 In addition to the required properties above, it is also possible to include
 
-- `zIndex` - set to a specific value to determine which zIndex the chat window will be placed at. Defaults to 10000. 
+- `zIndex` - set to a specific value to determine which zIndex the chat window will be placed at. Defaults to 10000.
 - `customerId` - if the customer is logged in, provide their customerId to inform the customer support agent who it is.
-
 
 ## Common errors
 
 Below are some common sources of errors if the chat window fails to appear. Remember to check the console for any errors.
 
-
 ### Invalid platform
 
-If you see an error similar to this: 
+If you see an error similar to this:
 
 ```
-GET https://sermo-webchat-ci1.dev-dockeree.int.comhem.com/api/platforms/webbchatt 404 (Not Found)
+GET https://sermo-api-ci1.dev-dockeree.int.comhem.com/api/platforms/webbchatt 404 (Not Found)
 ```
 
 It means that the specified platform does not exist in Sermo. Check the spelling and try again. In this case it should be `webbchatt -> webchat`.
@@ -154,9 +164,9 @@ Incoming messages from NowInteract are used to open chat windows.
 Outgoing messages are used to notify NowInteract about the users interaction with the chat window.
 
 ```json
-{ 
-  "sender": "comhem", 
-  "receiver": "nowinteract", 
+{
+  "sender": "comhem",
+  "receiver": "nowinteract",
   "eventName": "<EVENT>"
 }
 ```
