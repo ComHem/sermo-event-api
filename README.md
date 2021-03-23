@@ -21,7 +21,6 @@ The events are all listed below and described in more detail in following sectio
 
 - [`inbound/start`](#inbound-start)
 - [`inbound/text`](#inbound-text)
-- [`inbound/postback`](#inbound-postback)
 - [`inbound/heartbeat`](#inbound-heartbeat)
 - [`inbound/messages_read`](#inbound-messages_read)
 - [`inbound/client_left`](#inbound-client_left)
@@ -30,9 +29,6 @@ The events are all listed below and described in more detail in following sectio
 - [`outbound/queue_number`](#outbound-queue_number)
 - [`outbound/text`](#outbound-text)
 - [`outbound/info`](#outbound-info)
-- [`outbound/postback`](#outbound-postback)
-- [`outbound/web_url`](#outbound-web_url)
-- [`outbound/image`](#outbound-image)
 - [`outbound/carousel`](#outbound-carousel)
 - [`outbound/typing_on`](#outbound-typing_on)
 - [`outbound/typing_off`](#outbound-typing_off)
@@ -51,11 +47,10 @@ Sermo exposes a [socket.IO](https://socket.io/) server. Use the appropriate docs
 
 An API-key is required to connect. Contact the sermo team at ch-sermo@tele2.com.
 
-| env  | host |
-| -    | -    |
+| env  | host                                      |
+| ---- | ----------------------------------------- |
 | dev  | sermo-api-ci1.dev-dockeree.int.comhem.com |
-| prod | sermo-api.comhem.com |
-
+| prod | sermo-api.comhem.com                      |
 
 The api-key is passed as a query-parameter to the socket.io endpoint. For example, using node and the socket.io-client package:
 
@@ -150,7 +145,6 @@ Following attributes are used for almost all events.
 
 Inbound events are events sent from customer to the bot or the agent application.
 
-
 ### inbound start
 
 Sent when a customer starts a new conversation. The `params` property will be an object representing some select query parameters that was used to open the conversation.
@@ -195,17 +189,17 @@ Inbound image from the customer with an appended text.
 
 The image can be retreived from http://sermo-api.comhem.com/images/IMAGE_ID
 
-### inbound postback
+### inbound text with payload
 
-Inbound postback events are sent from the client application as a response to a [`outbound/postback`](#outbound-postback) event.
+Inbound text events are sent from the client application as a response to a [`quick reply`](#outbound-text-with-quick-replies).
 
 ```json
 {
-  "type": "postback",
+  "type": "text",
   "direction": "inbound",
   "userId": "8a8b5c18-c0dd-467b-bd77-7e7685fadf6d",
   "text": "Selection 1",
-  "payload": "postback-alternative-1"
+  "quickReplyPayload": "postback-alternative-1"
 }
 ```
 
@@ -357,7 +351,59 @@ Outbound image sent from the agent to the customer.
 
 The image can be retreived from http://sermo-api.comhem.com/images/IMAGE_ID
 
-### outbound info 
+### outbound text with quick replies
+
+Outbound text messages can contain zero or more _quick replies_ defined in the `quickReplies` property. Quick replies will be rendered as buttons in the client application and gives the customer a set of predefined actions.
+
+```json
+{
+  "type": "text",
+  "direction": "outbound",
+  "userId": "8a8b5c18-c0dd-467b-bd77-7e7685fadf6d",
+  "text": "Some image related text",
+  "imageId": "some-image-id",
+  "quickReplies": [
+    {
+      "type": "postback",
+      "text": "Alternativ 1",
+      "payload": "postback-alternative-1"
+    },
+    {
+      "type": "web_url",
+      "text": "Check your order",
+      "url": "https://somehost.com",
+      "windowOpen": true / false
+    }
+  ],
+  "agent": {
+    "id": "bot",
+    "name": "Bot",
+    "avatarId": "avatar1",
+    "avatarUrl": "https://some-url.png"
+  }
+}
+```
+
+There are two types of quick replies:
+
+- `postback` - when the customer clicks selections, an inbound `text` event will be sent with the `quickReplyPayload` set to the corresponding payload.
+
+  ```json
+  "type": "postback",
+  "text": "Button text",
+  "payload": "postback-alternative-1"
+  ```
+
+- `web_url` - will be rendered as links in the client application. If the property `windowOpen` is set to `true`, the link will be opened using `window.open` rather than a regular anchor.
+
+  ```json
+  "type": "web_url",
+  "text": "Button text",
+  "url": "http://google.com",
+  "windowOpen": true/false
+  ```
+
+### outbound info
 
 Outbound info event from the agent or bot to a customer. These events can be sent at any time. They will be displayed differently from normal text messages.
 
@@ -369,104 +415,6 @@ Outbound info event from the agent or bot to a customer. These events can be sen
   "text": "Chatten har placerats i kön \"Com Hem allmänt\""
 }
 ```
-
-### outbound postback
-
-Outbound postback from the agent or bot to a customer. These events are used to give the user a set of options to reply with. They will be rendered as buttons in the client application. When the user clicks the button, an [`inbound/postback`](#inbound-postback) event will be sent with the corresponding payload.
-
-```json
-{
-  "type": "postback",
-  "direction": "outbound",
-  "userId": "8a8b5c18-c0dd-467b-bd77-7e7685fadf6d",
-  "text": "Alternativ 1",
-  "payload": "postback-alternative-1",
-  "agent": {
-    "id": "bot",
-    "name": "Bot",
-    "avatarId": "avatar1",
-    "avatarUrl": "https://some-url.png"
-  }
-}
-```
-
-### outbound web_url
-
-Outbound web_url from the agent or bot to a customer. These events are used to provide the user with a call to action. The client application will render a button that will open a new tab with the specified URL when clicked.
-
-```json
-{
-  "type": "web_url",
-  "direction": "outbound",
-  "userId": "8a8b5c18-c0dd-467b-bd77-7e7685fadf6d",
-  "text": "Check your order",
-  "url": "https://somehost.com",
-  "agent": {
-    "id": "bot",
-    "name": "Bot",
-    "avatarId": "avatar1",
-    "avatarUrl": "https://some-url.png"
-  }
-}
-```
-
-### outbound image
-
-Outbound image tag from the agent or bot to a customer. The client application will render a image tag with the corresponding image url.
-
-```json
-{
-  "direction": "outbound",
-  "userId": "8a8b5c18-c0dd-467b-bd77-7e7685fadf6d",
-  "type": "image",
-  "imageUrl": "https://some-host/some-image.png",
-  "altText": "some alt text",
-  "agent": {
-    "id": "bot",
-    "name": "Bot",
-    "avatarId": "avatar1",
-    "avatarUrl": "https://some-url.png"
-  }
-}
-```
-
-### outbound carousel
-
-Outbound carousel from the agent or bot to a customer. The carousel can contain one or more cards which will be displayed as a carousel in the client application. Each card can contain title, subtitle, an image as well as a list of buttons. The buttons can be of type `postback` or `web_url`.
-
-```json
-{
-  "direction": "outbound",
-  "userId": "8a8b5c18-c0dd-467b-bd77-7e7685fadf6d",
-  "type": "carousel",
-  "agent": {
-    "id": "bot",
-    "name": "Bot",
-    "avatarId": "avatar1",
-    "avatarUrl": "https://some-url.png"
-  },
-  "cards": [
-    {
-      "title": "Card title",
-      "subtitle": "Card subtitle (optional)",
-      "imageUrl": "Card image URL (optional)",
-      "buttons": [
-        {
-          "type": "postback",
-          "text": "Postback",
-          "payload": "postback-payload"
-        },
-        {
-          "type": "web_url",
-          "text": "Click here",
-          "url": "http://google.com"
-        }
-      ]
-    }
-  ]
-}
-```
-
 
 ### outbound typing_on
 
@@ -533,7 +481,7 @@ Internal event used when a session needs to be handed over from bot to agent.
 }
 ```
 
-### internal handover_to_queue 
+### internal handover_to_queue
 
 Internal event used when a session needs to be transfered from one queue to another.
 
@@ -542,11 +490,12 @@ Internal event used when a session needs to be transfered from one queue to anot
   "type": "handover_to_queue",
   "direction": "internal",
   "queueId": "comviq_support",
-  "userId": "8a8b5c18-c0dd-467b-bd77-7e7685fadf6d",
+  "userId": "8a8b5c18-c0dd-467b-bd77-7e7685fadf6d"
 }
 ```
 
 ### internal claim_session
+
 ```json
 {
   "type": "claim_session",
