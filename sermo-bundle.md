@@ -139,19 +139,12 @@ Incoming messages from NowInteract are used to open chat windows.
 {
   "sender": "nowinteract",
   "receiver": "comhem",
-  "event": "<CHAT_TYPE>",
+  "event": "start_sales_chat",
   "platformId": "<PLATFORM>",
   "nowinteract_visitorid": "<NI_VISITOR_ID>",
   "nowinteract_leadid": "<NI_LEAD_ID>"
 }
 ```
-
-`CHAT_TYPE` specifies the type of chat to start. This is used by sermo to decide which platform to open the chat on. Currently these values are supported:
-
-- `start_sales_chat`
-- `start_churn_chat`
-- `start_web_chat `
-- `start_fa_chat`
 
 `PLATFORM` is an optional property and can be used to explicitly specify which platform to use. For example, this can be used to route some customers to the bot, and others straight to a human agent.
 
