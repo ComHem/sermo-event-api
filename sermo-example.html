@@ -1,42 +1,54 @@
 <!DOCTYPE html>
 <html>
-
-<head>
-    <script async type="text/javascript"
-        src="https://sermo-webchat-ci1.dev-dockeree.int.comhem.com/bundle/sermo.ci1.js"></script>
-
+  <head>
+    <script
+      async
+      type="text/javascript"
+      src="https://sermo-webchat-ci1.dev-dockeree.int.comhem.com/bundle/sermo.ci1.js"
+    ></script>
 
     <!-- uncomment for development -->
     <!-- <script async type="text/javascript"
         src="http://localhost:2222/sermo.local.js"></script> -->
-</head>
+  </head>
 
-<body>
+  <body>
     <button id="start-chat">Starta chatt</button>
 
     <script type="text/javascript">
-        window.addEventListener('load', () => {
-            const button = document.getElementById("start-chat");
+      window.addEventListener("load", () => {
+        const button = document.getElementById("start-chat");
 
-            // This will start a polling loop that checks if the provided platform is available
-            // use window.SERMO.clearAvailabilityListener('info', handleInfo) to unsubscribe
-            window.SERMO.setAvailabilityListener('webchat', (err, info) => {
-                if(!err) {
-                    button.disabled = !info.available;
-                    button.textContent = info.available ? 'Starta chatt' : 'Stängt';
-                }
-            }, { pollingInterval: 2000 });
+        // This will start a polling loop that checks if the provided platform is available
+        // use window.SERMO.clearAvailabilityListener("webchat") to unsubscribe
+        window.SERMO.setAvailabilityListener(
+          "webchat",
+          (err, info) => {
+            if (err) {
+              console.error(err);
+              return;
+            }
 
-            button.addEventListener("click", () => {
-                window.postMessage({
-                    sender: "comhem",
-                    receiver: "sermo",
-                    event: "START_CHAT",
-                    platformId: "webchat"
-                });
-            });
+            if (info.available) {
+              button.disabled = false;
+              button.textContent = "Starta chatt";
+            } else {
+              button.disabled = true;
+              button.textContent = "Stängt";
+            }
+          },
+          { pollingInterval: 2000 }
+        );
+
+        button.addEventListener("click", () => {
+          window.postMessage({
+            sender: "comhem",
+            receiver: "sermo",
+            event: "START_CHAT",
+            platformId: "webchat",
+          });
         });
+      });
     </script>
-</body>
-
+  </body>
 </html>

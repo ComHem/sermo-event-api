@@ -53,9 +53,25 @@ Ask the Sermo team which platforms are setup for your brand.
 Before opening a chat on a specific platform, make sure it is open and has available agents. The bundle exposes a `SERMO` global variable that emits platform availability information. For example:
 
 ```js
-window.SERMO.setAvailabilityListener("webchat", (info) => {
-  console.log(info);
-}, { pollingInterval: 5000 });
+window.SERMO.setAvailabilityListener(
+  "webchat",
+  (err, info) => {
+    // err is either null or an instance of Error
+    if (err) {
+      // err indicates there was a failure to fetch the availability status
+      // in this case, `info` will be null so we can only acknowledge the error and return
+      console.error(err.message);
+      return;
+    }
+
+    if (info.available) {
+      // chat is available
+    } else {
+      // chat is not available
+    }
+  },
+  { pollingInterval: 2000 }
+);
 
 // window.SERMO.clearAvailabilityListener("webchat") to remove the listener
 ```
