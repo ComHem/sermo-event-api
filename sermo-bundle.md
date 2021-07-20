@@ -38,7 +38,7 @@ See [sermo-example.html](./sermo-example.html) for a working minimal example sit
 
 Sermo is used by multiple brands. Currently, these brands are supported:
 
-- `comhem`
+- `tele2`
 - `comviq`
 - `comhemplay`
 
@@ -46,7 +46,7 @@ The chat window appearance is based on brand and/or platform.
 
 ## Platforms
 
-Sermo supports multiple platforms or chat _channels_ for each brand. For example, comhem has a support platform, a sales platform and a save platform. The platform indicates to Sermo _how_ the customer entered the chat.
+Sermo supports multiple platforms for each brand. For example, Tele2 can have a support platform, a sales platform and a save platform. The platform indicates to Sermo _how_ the customer entered the chat.
 
 Ask the Sermo team which platforms are setup for your brand.
 
@@ -154,7 +154,7 @@ Incoming messages from NowInteract are used to open chat windows.
 ```json
 {
   "sender": "nowinteract",
-  "receiver": "comhem",
+  "receiver": "sermo",
   "event": "start_sales_chat",
   "platformId": "<PLATFORM>",
   "nowinteract_visitorid": "<NI_VISITOR_ID>",
@@ -174,7 +174,7 @@ Outgoing messages are used to notify NowInteract about the users interaction wit
 
 ```json
 {
-  "sender": "comhem",
+  "sender": "sermo",
   "receiver": "nowinteract",
   "eventName": "<EVENT>"
 }
