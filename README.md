@@ -15,7 +15,7 @@ All events are using the following attributes:
   - `outbound` - sent from bot or agent applications to all applications, including customer.
   - `internal` - sent from and to all applications _except_ for customer applications.
 - `type` sets which type of event it is, e.i. text, typing, heartbeat, handover, etc.
-- `userId` is an unique id for the customers/users. For the web a new unique id is generated for every new visit while for Messenger the user id connected to the facebook account will be used which is persistent over time.
+- `userId` is an unique id for the customers/users.
 
 The events are all listed below and described in more detail in following sections:
 
@@ -40,35 +40,6 @@ The events are all listed below and described in more detail in following sectio
 - [`internal/customer_identified`](#internal-customer_identified)
 - [`internal/agent_done`](#internal-agent_done)
 - [`internal/application_heartbeat`](#internal-application_heartbeat)
-
-# Connecting to the event API
-
-Sermo exposes a [socket.IO](https://socket.io/) server. Use the appropriate docs for your platform https://socket.io/docs/.
-
-An API-key is required to connect. Contact the sermo team at ch-sermo@tele2.com.
-
-| env  | host                                      |
-| ---- | ----------------------------------------- |
-| dev  | sermo-api-ci1.dev-dockeree.int.comhem.com |
-| prod | sermo-api.comhem.com                      |
-
-The api-key is passed as a query-parameter to the socket.io endpoint. For example, using node and the socket.io-client package:
-
-```js
-const io = require('socket.io-client');
-const socket = io('https://<sermo-api-host>?apiKey=<your-api-key>', {
-  path: '/socket.io'
-});
-
-// Send
-socket.send({ direction: 'outbound', type: 'text', ... })
-
-// Receive
-socket.on('message', ev => {
-  console.log(ev);
-  // -> { direction: 'outbound', type: 'text', ... }
-});
-```
 
 ## Example Scenarios
 
@@ -118,21 +89,6 @@ The agent application needs to listen for all events to be able to take over the
 1. An agent is working on three sessions.
 1. The agent application calculate the probabilities that the customer is still there for all three sessions.
 1. Since the sum of all three probabilities add upp to 1.99 a new session is distributed to the agent.
-
-### A support session is handled by LiveChat
-
-1. A support session is started on the platform `comviq`.
-1. Sermo realizes that the session should be handled by LiveChat, a [`handover_to_queue`](#internal-handover_to_queue) event is sent with comviq_tech_support as a target queue.
-1. When livechat sees the hand over event, livechat claims the session by sending a [`claim_session`](#internal-claim_session) event so Sermo knows that the session is being handled.
-1. LiveChat is now in possesion of the session in question and deals with it as seen fit.
-
-### An assisted sales session is started in Sermo and handed over to LiveChat
-
-1. An assisted sales session is started in Sermo but the agent realizes that the customer want support help, not sales help.
-1. LiveChat has been listening on all events above enabling for the future agent in LiveChat to see the previous dialog.
-1. Agent in Sermo clicks on a transfer-to-queue drop down in Sermo and selects Comviq Teknisk Support. A [`handover_to_queue`](#internal-handover_to_queue) event is sent with comviq_tech_support as a target queue.
-1. When livechat sees the hand over event, livechat claims the session by sending a [`claim_session`](#internal-claim_session) event so Sermo knows that the session is being handled.
-1. LiveChat is now in possesion of the session in question and deals with it as seen fit.
 
 ## Common event attributes
 
@@ -367,12 +323,6 @@ Outbound text messages can contain zero or more _quick replies_ defined in the `
       "type": "postback",
       "text": "Alternativ 1",
       "payload": "postback-alternative-1"
-    },
-    {
-      "type": "web_url",
-      "text": "Check your order",
-      "url": "https://somehost.com",
-      "windowOpen": true / false
     }
   ],
   "agent": {
@@ -392,15 +342,6 @@ There are two types of quick replies:
   "type": "postback",
   "text": "Button text",
   "payload": "postback-alternative-1"
-  ```
-
-- `web_url` - will be rendered as links in the client application. If the property `windowOpen` is set to `true`, the link will be opened using `window.open` rather than a regular anchor.
-
-  ```json
-  "type": "web_url",
-  "text": "Button text",
-  "url": "http://google.com",
-  "windowOpen": true/false
   ```
 
 ### outbound info
@@ -489,7 +430,7 @@ Internal event used when a session needs to be transfered from one queue to anot
 {
   "type": "handover_to_queue",
   "direction": "internal",
-  "queueId": "comviq_support",
+  "queueId": "other_queue",
   "userId": "8a8b5c18-c0dd-467b-bd77-7e7685fadf6d"
 }
 ```
