@@ -64,8 +64,13 @@ window.SERMO.setAvailabilityListener(
       return;
     }
 
-    if (info.available) {
-      // chat is available
+    if (info.open) {
+      // is within opening hours 
+      if (info.available) {
+        // there are also available agents ready to chat
+      } else {
+        // within opening hours but no available agents
+      }
     } else {
       // chat is not available
     }
