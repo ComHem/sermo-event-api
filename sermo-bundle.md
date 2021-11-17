@@ -72,7 +72,7 @@ window.SERMO.setAvailabilityListener(
         // within opening hours but no available agents
       }
     } else {
-      // chat is not available
+      // chat is not within opening hours
     }
   },
   { pollingInterval: 2000 }
