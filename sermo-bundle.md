@@ -124,6 +124,7 @@ window.postMessage({
   receiver: "sermo",
   event: "START_CHAT",
   platformId: "<PLATFORM>",
+  webUserSessionId: "abc123",
 });
 ```
 
@@ -133,6 +134,7 @@ In addition to the required properties above, it is also possible to include
 
 - `zIndex` - set to a specific value to determine which zIndex the chat window will be placed at. Defaults to 10000.
 - `customerId` - if the customer is logged in, provide their customerId to inform the customer support agent who it is.
+- `webUserSessionId` - is an unique id linking one to one to the web user authenticated session 
 
 ## Common errors
 
