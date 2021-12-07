@@ -125,6 +125,10 @@ window.postMessage({
   event: "START_CHAT",
   platformId: "<PLATFORM>",
   crmSessionId: "abc123",
+  intent: {
+    productFamily: "Fast bredband",
+    intent: "Uppsägning",
+  }
 });
 ```
 
@@ -135,6 +139,8 @@ In addition to the required properties above, it is also possible to include
 - `zIndex` - set to a specific value to determine which zIndex the chat window will be placed at. Defaults to 10000.
 - `customerId` - if the customer is logged in, provide their customerId to inform the customer support agent who it is.
 - `crmSessionId` - is an unique id linking one to one to the web user authenticated session 
+- `productFamily` - is the product label of the button selected by the user on the site
+- `intent` - is the intent label of the button selected by what the user on the site
 
 ## Common errors
 
